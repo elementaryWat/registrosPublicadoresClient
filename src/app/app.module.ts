@@ -3,14 +3,20 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { PublicadoresComponent } from './components/publicadores.component';
+import { NavbarComponent } from './components/shared/navbar/navbar.component';
+import { ROUTES } from './app.routes';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PublicadoresComponent,
+    NavbarComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ROUTES
   ],
   providers: [],
   bootstrap: [AppComponent]
