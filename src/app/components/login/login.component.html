@@ -1,21 +1,31 @@
 <div class="login-form">
-  <form>
+  <form [formGroup]="formLogin" (ngSubmit)="login()">
     <h2 class="text-center">Inicio sesion</h2>
     <div class="form-group">
       <div class="input-group">
-          <span class="input-group-text"><i class="fa fa-user"></i></span>
-        <input type="text" class="form-control" placeholder="Nombre de usuario">
+        <span class="input-group-text">
+          <i class="fa fa-user"></i>
+        </span>
+        <input type="email" class="form-control" formControlName="username" placeholder="Nombre de usuario">
       </div>
     </div>
     <div class="form-group">
       <div class="input-group">
-        <span class="input-group-text"><i class="fa fa-lock"></i></span>
-        <input type="password" class="form-control" placeholder="Contraseña">
+        <span class="input-group-text">
+          <i class="fa fa-lock"></i>
+        </span>
+        <input type="password" class="form-control" formControlName="password" placeholder="Contraseña">
       </div>
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-sign-in-alt"></i> Ingresar</button>
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="formLogin.invalid">
+        <span *ngIf="!loading"> <i class="fa fa-sign-in-alt"></i> Ingresar</span>
+        <span *ngIf="loading"> <i class="fas fa-sync fa-spin"></i> Ingresando</span>
+      </button>
     </div>
+    <div class="alert alert-danger" role="alert" *ngIf="hayErrorLogin">
+        {{errorLogin}}
+      </div>
     <div class="clearfix">
       <a href="#" class="pull-right">¿Olvidaste la contraseña?</a>
     </div>
