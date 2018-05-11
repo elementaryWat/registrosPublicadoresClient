@@ -86,7 +86,12 @@ export class AgregarPublicadorComponent implements OnInit {
       if(currentValue){
         this.formAgregarHermano.controls['fechaBautismo'].setValidators([Validators.required]);
       }else{
-        this.formAgregarHermano.controls['fechaBautismo'].clearValidators();        
+        this.formAgregarHermano.controls['fechaBautismo'].clearValidators(); 
+        this.formAgregarHermano.controls['fechaBautismo'].reset();
+        this.formAgregarHermano.controls['idPrecursor'].clearValidators();        
+        this.formAgregarHermano.controls['idPrecursor'].reset();        
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].clearValidators();        
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].reset();    
       }
     })
     this.formAgregarHermano.controls['precReg'].valueChanges.subscribe(currentValue=>{
@@ -95,7 +100,9 @@ export class AgregarPublicadorComponent implements OnInit {
         this.formAgregarHermano.controls['fechaNombramientoPrecursor'].setValidators([Validators.required]);
       }else{
         this.formAgregarHermano.controls['idPrecursor'].clearValidators();        
+        this.formAgregarHermano.controls['idPrecursor'].reset();        
         this.formAgregarHermano.controls['fechaNombramientoPrecursor'].clearValidators();        
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].reset();        
       }
     })
   }

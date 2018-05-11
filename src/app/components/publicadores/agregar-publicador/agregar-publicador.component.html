@@ -120,8 +120,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary"
            data-dismiss="modal">Cancelar</button>
-          <button data-toggle="tooltip" data-placement="top" title="Corrija los errores para continuar"
-           type="submit" class="btn btn-primary" [disabled]="formAgregarHermano.invalid">
+          <button type="submit" class="btn btn-primary" [disabled]="formAgregarHermano.invalid">
             <span *ngIf="!loading">
               <i class="fa fa-user-plus"></i> Agregar</span>
             <span *ngIf="loading">

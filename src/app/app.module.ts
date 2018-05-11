@@ -13,6 +13,8 @@ import { LoginComponent } from './components/login/login.component';
 import { LoginService } from './services/login.service';
 import { AgregarPublicadorComponent } from './components/publicadores/agregar-publicador/agregar-publicador.component';
 import { MyDatePickerModule } from 'mydatepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { MyDatePickerModule } from 'mydatepicker';
     ReactiveFormsModule,
     HttpModule,
     ROUTES,
-    MyDatePickerModule
+    MyDatePickerModule,
+    TooltipModule.forRoot()
   ],
   providers: [LoginService,PublicadoresService],
   bootstrap: [AppComponent]
