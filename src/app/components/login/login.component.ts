@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   loading: boolean = false;
   constructor(private loginService: LoginService,
     private router: Router) {
+      loginService.verificarLoggedLocal();
       loginService.islogged.subscribe(isLogged=>{
         if(isLogged){
           router.navigate(['/hermanos'])

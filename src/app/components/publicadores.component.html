@@ -1,8 +1,45 @@
-<p>
-  Aqui se mostraran los datos de publicadores
-  Aqui se mostraran los datos de publicadores
-  Aqui se mostraran los datos de publicadores
-  Aqui se mostraran los datos de publicadores
-  Aqui se mostraran los datos de publicadores
-  Aqui se mostraran los datos de publicadores
-</p>
+<div class="accordion" id="accordion">
+  <div class="card" *ngFor="let familia of familias">
+    <div class="card-header publicador-header" id="heading{{familia._id}}">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#collapse'+ familia._id" aria-expanded="true"
+          [attr.aria-controls]="'#collapse'+ familia._id">
+          {{familia.apellido}}
+        </button>
+        <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
+          <button (click)="abrirDialogoNuevoIntegrante(familia)"
+            type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarPublicadorModal">
+            <i class="fas fa-user-plus"></i>
+          </button>
+          <button type="button" class="btn btn-success">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button type="button" class="btn btn-danger">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </h5>
+    </div>
+    <div id="collapse{{familia._id}}" class="collapse" [attr.aria-labelledby]="'#heading'+ familia._id" data-parent="#accordion">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item hermano-row"*ngFor="let hermano of familia.integrantes" >
+            {{hermano.nombre}}
+            <div class="btn-group float-right" role="group" aria-label="Toolbar Publicador">
+              <button type="button" class="btn btn-outline-primary">
+                <i class="fas fa-id-card"></i>
+              </button>
+              <button type="button" class="btn btn-outline-success">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button type="button" class="btn btn-outline-danger">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<app-agregar-publicador></app-agregar-publicador>

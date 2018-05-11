@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import * as $ from 'jquery';
+import { LoginService } from '../../../services/login.service';
 
 
 @Component({
@@ -9,7 +10,7 @@ import * as $ from 'jquery';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private elementRef:ElementRef) { }
+  constructor(private loginService:LoginService) { }
 
   ngOnInit() {}
   
@@ -28,4 +29,7 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  cerrarSesion(){
+    this.loginService.logOut();
+  }
 }

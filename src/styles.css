@@ -1,3 +1,19 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.publicador-header:hover .toolbar-familia{
+  opacity: 1;
+}
+.publicador-header .toolbar-familia{
+  opacity: 0;
+}
+
+.hermano-row:hover .btn-group{
+  opacity: 1;
+}
+.hermano-row .btn-group{
+  opacity: 0;
+}
+
 /* admin-theme-styles */
 html {
   position: relative;

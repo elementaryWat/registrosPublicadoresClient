@@ -15,7 +15,15 @@ export class LoginService {
   constructor(private http:Http) { 
     this.islogged=new BehaviorSubject(false);
   }
-  
+
+  verificarLoggedLocal(){
+    this.usuarioActual= JSON.parse(localStorage.getItem('usuario'));
+    this.tokenActual=localStorage.getItem("token");
+    if(this.usuarioActual && this.tokenActual){
+      this.islogged.next(true);
+    }
+  }
+
   login(email:string, password:string){
     let body=JSON.stringify({email,password});
     let url=GLOBAL.url+"/api/users/login";
@@ -27,8 +35,28 @@ export class LoginService {
 
   setUsuarioActual(user:Usuario){
     this.usuarioActual=user;
+    localStorage.setItem("usuario",JSON.stringify(user));
   }
+
+  getUsuarioActual(){
+    return this.usuarioActual;
+  }
+
   setTokenActual(token:string){
     this.tokenActual=token;
+    localStorage.setItem("token",token);
   }
+
+  getTokenActual(){
+    return this.tokenActual;
+  }
+
+  logOut(){
+    localStorage.removeItem("usuario");  
+    localStorage.removeItem("token");  
+    this.usuarioActual=null;
+    this.tokenActual=null;
+    this.islogged.next(false);
+  }
+
 }

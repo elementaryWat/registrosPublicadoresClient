@@ -1,0 +1,134 @@
+<!-- Modal -->
+<div *ngIf="familiaSeleccionada"  class="modal fade" id="agregarPublicadorModal" tabindex="-1" role="dialog" aria-labelledby="addPublicadorModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form [formGroup]="formAgregarHermano" (ngSubmit)="agregarHermano()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="agregarPublicadorTitle">Agregar integrante a familia {{familiaSeleccionada.apellido}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="nombreP">Nombre</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarHermano.controls['nombre'].valid && formAgregarHermano.controls['nombre'].touched
+                          , 'is-invalid':formAgregarHermano.controls['nombre'].invalid && formAgregarHermano.controls['nombre'].touched}"
+              class="form-control" formControlName="nombre" id="nombreP">
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['nombre'].errors?.required">
+              Debe ingresar el nombre del publicador
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="celular">Genero</label>
+            <select class="custom-select" formControlName="genero">
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <my-date-picker name="fechaNacimiento" [options]="myDatePickerOptions" formControlName="fechaNacimiento" id="fechaNacimiento"></my-date-picker>
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['fechaNacimiento'].errors?.required">
+              Debe ingresar la fecha de nacimiento
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="domicilio">Domicilio</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarHermano.controls['domicilio'].valid && formAgregarHermano.controls['domicilio'].touched
+                            , 'is-invalid':formAgregarHermano.controls['domicilio'].invalid && formAgregarHermano.controls['domicilio'].touched}"
+              class="form-control" formControlName="domicilio" id="domicilio">
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['domicilio'].errors?.required">
+              Debe ingresar el domicilio
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="telefono">Telefono</label>
+            <input type="number" [ngClass]="{'is-valid': formAgregarHermano.controls['telefono'].valid && formAgregarHermano.controls['telefono'].touched
+                            , 'is-invalid':formAgregarHermano.controls['telefono'].invalid && formAgregarHermano.controls['telefono'].touched}"
+              class="form-control" formControlName="telefono" id="telefono">
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['telefono'].errors?.required">
+              Debe ingresar el telefono
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="celular">Celular</label>
+            <input type="number" [ngClass]="{'is-valid': formAgregarHermano.controls['celular'].valid && formAgregarHermano.controls['celular'].touched
+                                , 'is-invalid':formAgregarHermano.controls['celular'].invalid && formAgregarHermano.controls['celular'].touched}"
+              class="form-control" formControlName="celular" id="celular">
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['celular'].errors?.required">
+              Debe ingresar el celular
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="bautizado" formControlName="bautizado">
+              <label class="custom-control-label" for="bautizado">Bautizado</label>
+            </div>
+          </div>
+          <div *ngIf="formAgregarHermano.controls['bautizado'].value">
+            <div class="form-group">
+              <label for="fechaBautismo">Fecha de bautismo</label>
+              <my-date-picker name="fechaBautismo" [options]="myDatePickerOptions" formControlName="fechaBautismo" id="fechaBautismo"></my-date-picker>
+              <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['fechaBautismo'].errors?.required">
+                Debe ingresar la fecha de bautismo
+              </div>
+            </div>
+            <div *ngIf="formAgregarHermano.controls['genero'].value=='M'">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="siervoministerial" formControlName="siervoMinisterial">
+                  <label class="custom-control-label" for="siervoministerial">Siervo ministerial</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="anciano" formControlName="anciano">
+                  <label class="custom-control-label" for="anciano">Anciano</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="precReg" formControlName="precReg">
+                  <label class="custom-control-label" for="precReg">Precursor/a regular</label>
+                </div>
+              </div>
+              <div *ngIf="formAgregarHermano.controls['precReg'].value" >
+                <div class="form-group">
+                  <label for="idPrecursor">ID precursor/a</label>
+                  <input type="text" [ngClass]="{'is-valid': formAgregarHermano.controls['idPrecursor'].valid && formAgregarHermano.controls['idPrecursor'].touched
+                                      , 'is-invalid':formAgregarHermano.controls['idPrecursor'].invalid && formAgregarHermano.controls['idPrecursor'].touched}"
+                    class="form-control" formControlName="idPrecursor" id="idPrecursor">
+                  <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['idPrecursor'].errors?.required">
+                    Debe ingresar el ID del precursor
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="fechaNombramientoPrecursor">Fecha de nombramiento</label>
+                  <my-date-picker name="fechaNombramientoPrecursor" [options]="myDatePickerOptions" formControlName="fechaNombramientoPrecursor" id="fechaNombramientoPrecursor"></my-date-picker>
+                  <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['fechaNombramientoPrecursor'].errors?.required">
+                    Debe ingresar la fecha de nombramiento
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-danger" role="alert" *ngIf="hayErrorAdd">
+            {{errorAdd}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+           data-dismiss="modal">Cancelar</button>
+          <button data-toggle="tooltip" data-placement="top" title="Corrija los errores para continuar"
+           type="submit" class="btn btn-primary" [disabled]="formAgregarHermano.invalid">
+            <span *ngIf="!loading">
+              <i class="fa fa-user-plus"></i> Agregar</span>
+            <span *ngIf="loading">
+              <i class="fas fa-sync fa-spin"></i> Agregando</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
