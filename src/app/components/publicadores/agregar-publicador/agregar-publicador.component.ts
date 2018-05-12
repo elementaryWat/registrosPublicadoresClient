@@ -3,19 +3,31 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IMyDpOptions } from 'mydatepicker';
 import { PublicadoresService } from '../../../services/publicadores.service';
 import { Familia } from '../../../interfaces/familia.interface';
+import { Publicador } from '../../../interfaces/publicador.interface';
+import { LoginService } from '../../../services/login.service';
+import * as moment from 'moment';
+import 'moment/locale/es';
 
 @Component({
-  selector: 'app-agregar-publicador',
+  selector: 'app-agregaryeditar-publicador',
   templateUrl: './agregar-publicador.component.html',
   styleUrls: ['./agregar-publicador.component.css']
 })
 export class AgregarPublicadorComponent implements OnInit {
   formAgregarHermano: FormGroup;
+  hermanoToAdd: Publicador;
   hayErrorAdd: boolean;
-  familiaSeleccionada:Familia;
+  familiaSeleccionada: Familia;
+  hermanoSeleccionado: Publicador;
   errorAdd;
+  addHermanoExitoso: boolean = false;
+  mensajeExito: string = "";
   loading: boolean = false;
-  familias:Familia[];
+  familias: Familia[];
+  cantGrupos: number;
+  grupos: any[] = [];
+  modoComponent: string = "add";
+
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
     dateFormat: 'dd/mm/yyyy'
@@ -25,39 +37,98 @@ export class AgregarPublicadorComponent implements OnInit {
   public model: any = { date: { year: 2018, month: 10, day: 9 } };
 
 
-  constructor(private publicadorService:PublicadoresService) {
+  constructor(private publicadorService: PublicadoresService,
+    private userService: LoginService) {
     this.crearFormAgregarHermano();
-    publicadorService.obtenerFamilias().subscribe(data=>{
-      this.familias=data.familias;
+    this.cantGrupos = userService.getUsuarioActual().congregacion.cantidadGrupos;
+    for (let i = 1; i <= this.cantGrupos; i++) {
+      this.grupos.push(i);
+    }
+    publicadorService.obtenerFamilias().subscribe(data => {
+      this.familias = data.familias;
+      publicadorService.openDialog.subscribe(opened => {
+        if (opened) {
+          this.modoComponent = publicadorService.modoDialog;
+          if (this.modoComponent == "add") {
+            this.familiaSeleccionada = publicadorService.familiaSeleccionada;
+            this.formAgregarHermano.reset({
+              nombre: '',
+              familia: this.familiaSeleccionada._id,
+              genero: 'M',
+              domicilio: '',
+              grupo: 1,
+              telefono: '',
+              celular: '',
+              fechaNacimiento: '',
+              bautizado: false,
+              fechaBautismo: '',
+              ungido: false,
+              siervoMinisterial: false,
+              anciano: false,
+              precReg: false,
+              idPrecursor: '',
+              fechaNombramientoPrecursor: ''
+            });
+          } else if (this.modoComponent == "edit") {
+            this.hermanoSeleccionado = publicadorService.hermanoSeleccionado;
+            this.formAgregarHermano.reset(this.hermanoSeleccionado);
+            this.setearFechas();
+          }
+        }
+      })
     })
-    publicadorService.openDialog.subscribe(opened=>{
-      this.familiaSeleccionada=publicadorService.familiaSeleccionada;
-      
-      if(opened){
-        this.formAgregarHermano.reset({
-          nombre:'',
-          familia:this.familiaSeleccionada._id,
-          genero:'M',
-          domicilio:'',
-          grupo:1,
-          telefono:'',
-          celular:'',
-          fechaNacimiento:'',
-          bautizado:false,
-          fechaBautismo:'',
-          ungido:false,
-          siervoMinisterial:false,
-          anciano:false,
-          precReg:false,
-          idPrecursor:'',
-          fechaNombramientoPrecursor:''
-        });
-      }
-    })
-
+    
   }
 
   ngOnInit() {
+  }
+
+  setearFechas(){
+    let fechaNacimiento = this.hermanoSeleccionado.fechaNacimiento;
+          if (fechaNacimiento != undefined && fechaNacimiento != null && fechaNacimiento != '') {
+            let fechaNacimientoF = new Date(fechaNacimiento);
+            this.formAgregarHermano.patchValue(
+              {
+                fechaNacimientoF: {
+                  date: {
+                    year: fechaNacimientoF.getFullYear(),
+                    month: fechaNacimientoF.getMonth() + 1,
+                    day: fechaNacimientoF.getDate()
+                  }
+                }
+              }
+            );
+          }
+          let fechaBautismo = this.hermanoSeleccionado.fechaBautismo;
+          if (fechaBautismo != undefined && fechaBautismo != null && fechaBautismo != '') {
+            let fechaBautismoF = new Date(fechaBautismo);
+            this.formAgregarHermano.patchValue(
+              {
+                fechaBautismoF: {
+                  date: {
+                    year: fechaBautismoF.getFullYear(),
+                    month: fechaBautismoF.getMonth() + 1,
+                    day: fechaBautismoF.getDate()
+                  }
+                }
+              }
+            );
+          }
+          let fechaNombramientoPrecursor = this.hermanoSeleccionado.fechaNombramientoPrecursor;
+          if (fechaNombramientoPrecursor != undefined && fechaNombramientoPrecursor != null && fechaNombramientoPrecursor != '') {
+            let fechaNombramientoPrecursorF = new Date(fechaNombramientoPrecursor);
+            this.formAgregarHermano.patchValue(
+              {
+                fechaNombramientoPrecursorF: {
+                  date: {
+                    year: fechaNombramientoPrecursorF.getFullYear(),
+                    month: fechaNombramientoPrecursorF.getMonth() + 1,
+                    day: fechaNombramientoPrecursorF.getDate()
+                  }
+                }
+              }
+            );
+          }
   }
 
   crearFormAgregarHermano() {
@@ -69,46 +140,101 @@ export class AgregarPublicadorComponent implements OnInit {
       'grupo': new FormControl('', Validators.required),
       'telefono': new FormControl(''),
       'celular': new FormControl(''),
+      'fechaNacimientoF': new FormControl(null, Validators.required),
       'fechaNacimiento': new FormControl(null, Validators.required),
       'bautizado': new FormControl('', Validators.required),
+      'fechaBautismoF': new FormControl(null),
       'fechaBautismo': new FormControl(null),
       'ungido': new FormControl(false),
       'siervoMinisterial': new FormControl(false),
       'anciano': new FormControl(false),
       'precReg': new FormControl(false),
       'idPrecursor': new FormControl(''),
-      'fechaNombramientoPrecursor': new FormControl(''),      
+      'fechaNombramientoPrecursorF': new FormControl(''),
+      'fechaNombramientoPrecursor': new FormControl('')
     });
     this.formAgregarHermano.valueChanges.subscribe(currentValue => {
       this.hayErrorAdd = false;
+      this.addHermanoExitoso = false;
     })
-    this.formAgregarHermano.controls['bautizado'].valueChanges.subscribe(currentValue=>{
-      if(currentValue){
+    this.formAgregarHermano.controls['bautizado'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
         this.formAgregarHermano.controls['fechaBautismo'].setValidators([Validators.required]);
-      }else{
-        this.formAgregarHermano.controls['fechaBautismo'].clearValidators(); 
+      } else {
+        this.formAgregarHermano.controls['fechaBautismo'].clearValidators();
         this.formAgregarHermano.controls['fechaBautismo'].reset();
-        this.formAgregarHermano.controls['idPrecursor'].clearValidators();        
-        this.formAgregarHermano.controls['idPrecursor'].reset();        
-        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].clearValidators();        
-        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].reset();    
+        this.formAgregarHermano.controls['idPrecursor'].clearValidators();
+        this.formAgregarHermano.controls['idPrecursor'].reset();
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].clearValidators();
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].reset();
       }
     })
-    this.formAgregarHermano.controls['precReg'].valueChanges.subscribe(currentValue=>{
-      if(currentValue){
+    this.formAgregarHermano.controls['precReg'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
         this.formAgregarHermano.controls['idPrecursor'].setValidators([Validators.required]);
         this.formAgregarHermano.controls['fechaNombramientoPrecursor'].setValidators([Validators.required]);
-      }else{
-        this.formAgregarHermano.controls['idPrecursor'].clearValidators();        
-        this.formAgregarHermano.controls['idPrecursor'].reset();        
-        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].clearValidators();        
-        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].reset();        
+      } else {
+        this.formAgregarHermano.controls['idPrecursor'].clearValidators();
+        this.formAgregarHermano.controls['idPrecursor'].reset();
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].clearValidators();
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].reset();
+      }
+    })
+    this.formAgregarHermano.controls['fechaBautismoF'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
+        let fechaFormateada = `${currentValue.date.year}/${currentValue.date.month}/${currentValue.date.day}`;
+        this.formAgregarHermano.controls['fechaBautismo'].setValue(fechaFormateada);
+      }
+    })
+    this.formAgregarHermano.controls['fechaNacimientoF'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
+        let fechaFormateada = `${currentValue.date.year}/${currentValue.date.month}/${currentValue.date.day}`;
+        this.formAgregarHermano.controls['fechaNacimiento'].setValue(fechaFormateada);
+      }
+    })
+    this.formAgregarHermano.controls['fechaNombramientoPrecursorF'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
+        let fechaFormateada = `${currentValue.date.year}/${currentValue.date.month}/${currentValue.date.day}`;
+        this.formAgregarHermano.controls['fechaNombramientoPrecursor'].setValue(fechaFormateada);
+      }
+    })
+    this.formAgregarHermano.controls['genero'].valueChanges.subscribe(currentValue => {
+      if (currentValue == "F") {
+        this.formAgregarHermano.controls['siervoMinisterial'].setValue(false);
+        this.formAgregarHermano.controls['anciano'].setValue(false);
+      }
+    })
+    this.formAgregarHermano.controls['siervoMinisterial'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
+        this.formAgregarHermano.controls['anciano'].setValue(false);
+      }
+    })
+    this.formAgregarHermano.controls['anciano'].valueChanges.subscribe(currentValue => {
+      if (currentValue) {
+        this.formAgregarHermano.controls['siervoMinisterial'].setValue(false);
       }
     })
   }
 
   agregarHermano() {
-    console.log(this.formAgregarHermano);
-    
+    console.log("add");
+    console.log(this.formAgregarHermano.value);
+    /* this.loading = true;
+    this.hermanoToAdd = this.formAgregarHermano.value;
+    this.publicadorService.agregarHermano(this.hermanoToAdd).subscribe(data => {
+      this.loading = false;
+      this.addHermanoExitoso = true;
+      this.mensajeExito = "Se ha agregado al hermano de manera exitosa";
+    }, error => {
+      this.loading = false;
+      this.hayErrorAdd = true;
+      this.errorAdd = "Ocurrio un error al agregar al hermano";
+      console.log(error);
+    }) */
+  }
+
+  editarHermano() {
+    console.log('edit');
+    console.log(this.formAgregarHermano.value);
   }
 }

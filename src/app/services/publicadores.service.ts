@@ -4,6 +4,7 @@ import { Http, Headers } from '@angular/http';
 import { GLOBAL } from '../GLOBAL';
 import { LoginService } from './login.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Publicador } from '../interfaces/publicador.interface';
 
 @Injectable()
 export class PublicadoresService {
@@ -11,8 +12,10 @@ export class PublicadoresService {
   hermanosPorFamilia:Familia[];
   hermanosPorFamiliaS:BehaviorSubject<Familia[]>;
   familiaSeleccionada:Familia;
+  hermanoSeleccionado:Publicador;
   famMap:Map<string,number>;
   openDialog:BehaviorSubject<boolean>;
+  modoDialog:string;
 
   constructor(private http:Http,
     private loginService:LoginService) {
@@ -23,7 +26,7 @@ export class PublicadoresService {
   }
   obtenerFamilias(){
     let headers=new Headers({'Authorization':this.loginService.getTokenActual()});
-    return this.http.get(this.url+"/listaFamilias/"+this.loginService.getUsuarioActual().congregacion, {headers})
+    return this.http.get(this.url+"/listaFamilias/"+this.loginService.getUsuarioActual().congregacion._id, {headers})
       .map(res=>{
         return res.json();
       })
@@ -33,7 +36,7 @@ export class PublicadoresService {
     this.hermanosPorFamilia=[];
     this.famMap.clear();
     let headers=new Headers({'Authorization':this.loginService.getTokenActual()});
-    return this.http.get(this.url+"/listaFamilias/"+this.loginService.getUsuarioActual().congregacion, {headers})
+    return this.http.get(this.url+"/listaFamilias/"+this.loginService.getUsuarioActual().congregacion._id, {headers})
       .map(res=>{
         return res.json();
       })
@@ -57,6 +60,18 @@ export class PublicadoresService {
   obtenerHermanosFamilia(familia:string){
     let headers=new Headers({'Authorization':this.loginService.getTokenActual()});
     return this.http.get(this.url+"/listaHermanos/"+familia, {headers})
+      .map(res=>{
+        return res.json();
+      })
+  }
+
+  agregarHermano(publicador:Publicador){
+    let body=JSON.stringify(publicador);
+    let headers=new Headers({
+      'Authorization':this.loginService.getTokenActual(),
+      'Content-Type':'application/json'
+    });
+    return this.http.post(this.url+"/agregar", body , {headers})
       .map(res=>{
         return res.json();
       })

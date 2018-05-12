@@ -10,13 +10,13 @@ export interface Publicador{
     grupo:number,
     telefono:string,
     celular:string,
-    fechaNacimiento:Date,
+    fechaNacimiento:string,
     bautizado:boolean,
-    fechaBautismo?:Date,
+    fechaBautismo?:string,
     ungido:boolean,
     siervoMinisterial?:boolean,
     anciano?:boolean,
     precReg:boolean,
     idPrecursor?:string,
-    fechaNombramientoPrecursor?:Date
+    fechaNombramientoPrecursor?:string
 }

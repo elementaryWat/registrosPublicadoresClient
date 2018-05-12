@@ -1,3 +1,4 @@
+import { Publicador } from './../interfaces/publicador.interface';
 import { Familia } from './../interfaces/familia.interface';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import 'jquery-ui';
@@ -25,6 +26,13 @@ export class PublicadoresComponent implements AfterViewInit {
 
   abrirDialogoNuevoIntegrante(familia:Familia){
     this.publicadoresService.familiaSeleccionada=familia;
+    this.publicadoresService.modoDialog="add";
+    this.publicadoresService.openDialog.next(true);
+  }
+
+  abrirDialogoEditarHermano(hermano:Publicador){
+    this.publicadoresService.hermanoSeleccionado=hermano;
+    this.publicadoresService.modoDialog="edit";
     this.publicadoresService.openDialog.next(true);
   }
 

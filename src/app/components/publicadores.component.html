@@ -8,10 +8,10 @@
         </button>
         <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
           <button (click)="abrirDialogoNuevoIntegrante(familia)"
-            type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarPublicadorModal">
+            type="button" class="btn btn-success" data-toggle="modal" data-target="#addandEditPublicadorModal">
             <i class="fas fa-user-plus"></i>
           </button>
-          <button type="button" class="btn btn-success">
+          <button type="button" class="btn btn-primary">
             <i class="fas fa-edit"></i>
           </button>
           <button type="button" class="btn btn-danger">
@@ -26,10 +26,10 @@
           <li class="list-group-item hermano-row"*ngFor="let hermano of familia.integrantes" >
             {{hermano.nombre}}
             <div class="btn-group float-right" role="group" aria-label="Toolbar Publicador">
-              <button type="button" class="btn btn-outline-primary">
+              <button type="button" class="btn btn-outline-secondary">
                 <i class="fas fa-id-card"></i>
               </button>
-              <button type="button" class="btn btn-outline-success">
+              <button (click)="abrirDialogoEditarHermano(hermano)" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addandEditPublicadorModal">
                 <i class="fas fa-user-edit"></i>
               </button>
               <button type="button" class="btn btn-outline-danger">
@@ -42,4 +42,4 @@
     </div>
   </div>
 </div>
-<app-agregar-publicador></app-agregar-publicador>
+<app-agregaryeditar-publicador></app-agregaryeditar-publicador>
