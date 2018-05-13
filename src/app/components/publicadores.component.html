@@ -2,8 +2,8 @@
   <div class="card" *ngFor="let familia of familias">
     <div class="card-header publicador-header" id="heading{{familia._id}}">
       <h5 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#collapse'+ familia._id" aria-expanded="true"
-          [attr.aria-controls]="'#collapse'+ familia._id">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" aria-expanded="false" [attr.data-target]="'#collapse'+ familia._id"
+          [attr.aria-controls]="'collapse'+ familia._id" (click)="onClickFamily(familia._id)">
           {{familia.apellido}}
         </button>
         <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
@@ -20,10 +20,12 @@
         </div>
       </h5>
     </div>
-    <div id="collapse{{familia._id}}" class="collapse" [attr.aria-labelledby]="'#heading'+ familia._id" data-parent="#accordion">
+    <div id="collapse{{familia._id}}" class="collapse" [attr.aria-labelledby]="'heading'+ familia._id" data-parent="#accordion">
       <div class="card-body">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item hermano-row"*ngFor="let hermano of familia.integrantes" >
+          <li class="list-group-item hermano-row" *ngFor="let hermano of familia.integrantes" >
+            <!-- <i class="fas fa-male" *ngIf="hermano.genero=='M'"></i>
+            <i class="fas fa-female" *ngIf="hermano.genero=='F'" ></i> -->
             {{hermano.nombre}}
             <div class="btn-group float-right" role="group" aria-label="Toolbar Publicador">
               <button type="button" class="btn btn-outline-secondary">

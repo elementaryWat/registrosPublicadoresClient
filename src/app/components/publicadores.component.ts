@@ -14,6 +14,7 @@ import { PublicadoresService } from '../services/publicadores.service';
 })
 export class PublicadoresComponent implements AfterViewInit {
   familias:Familia[];
+  familiaClickeada:string="";
   constructor(public publicadoresService:PublicadoresService) { 
     publicadoresService.obtenerFamiliasConHermanos();
     publicadoresService.hermanosPorFamiliaS.subscribe(familias=>{
@@ -22,6 +23,10 @@ export class PublicadoresComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  onClickFamily(familiaId:string){
+    this.familiaClickeada=familiaId;
   }
 
   abrirDialogoNuevoIntegrante(familia:Familia){

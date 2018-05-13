@@ -7,6 +7,7 @@ import { Publicador } from '../../../interfaces/publicador.interface';
 import { LoginService } from '../../../services/login.service';
 import * as moment from 'moment';
 import 'moment/locale/es';
+import { SocketService } from '../../../services/socket.service';
 
 @Component({
   selector: 'app-agregaryeditar-publicador',
@@ -27,6 +28,7 @@ export class AgregarPublicadorComponent implements OnInit {
   cantGrupos: number;
   grupos: any[] = [];
   modoComponent: string = "add";
+  socket: any;
 
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
@@ -38,7 +40,9 @@ export class AgregarPublicadorComponent implements OnInit {
 
 
   constructor(private publicadorService: PublicadoresService,
-    private userService: LoginService) {
+    private userService: LoginService,
+    private socketService: SocketService) {
+    this.socket = socketService.socket;
     this.crearFormAgregarHermano();
     this.cantGrupos = userService.getUsuarioActual().congregacion.cantidadGrupos;
     for (let i = 1; i <= this.cantGrupos; i++) {
@@ -77,62 +81,63 @@ export class AgregarPublicadorComponent implements OnInit {
         }
       })
     })
-    
+
   }
 
   ngOnInit() {
   }
 
-  setearFechas(){
+  setearFechas() {
     let fechaNacimiento = this.hermanoSeleccionado.fechaNacimiento;
-          if (fechaNacimiento != undefined && fechaNacimiento != null && fechaNacimiento != '') {
-            let fechaNacimientoF = new Date(fechaNacimiento);
-            this.formAgregarHermano.patchValue(
-              {
-                fechaNacimientoF: {
-                  date: {
-                    year: fechaNacimientoF.getFullYear(),
-                    month: fechaNacimientoF.getMonth() + 1,
-                    day: fechaNacimientoF.getDate()
-                  }
-                }
-              }
-            );
+    if (fechaNacimiento != undefined && fechaNacimiento != null && fechaNacimiento != '') {
+      let fechaNacimientoF = new Date(fechaNacimiento);
+      this.formAgregarHermano.patchValue(
+        {
+          fechaNacimientoF: {
+            date: {
+              year: fechaNacimientoF.getFullYear(),
+              month: fechaNacimientoF.getMonth() + 1,
+              day: fechaNacimientoF.getDate()
+            }
           }
-          let fechaBautismo = this.hermanoSeleccionado.fechaBautismo;
-          if (fechaBautismo != undefined && fechaBautismo != null && fechaBautismo != '') {
-            let fechaBautismoF = new Date(fechaBautismo);
-            this.formAgregarHermano.patchValue(
-              {
-                fechaBautismoF: {
-                  date: {
-                    year: fechaBautismoF.getFullYear(),
-                    month: fechaBautismoF.getMonth() + 1,
-                    day: fechaBautismoF.getDate()
-                  }
-                }
-              }
-            );
+        }
+      );
+    }
+    let fechaBautismo = this.hermanoSeleccionado.fechaBautismo;
+    if (fechaBautismo != undefined && fechaBautismo != null && fechaBautismo != '') {
+      let fechaBautismoF = new Date(fechaBautismo);
+      this.formAgregarHermano.patchValue(
+        {
+          fechaBautismoF: {
+            date: {
+              year: fechaBautismoF.getFullYear(),
+              month: fechaBautismoF.getMonth() + 1,
+              day: fechaBautismoF.getDate()
+            }
           }
-          let fechaNombramientoPrecursor = this.hermanoSeleccionado.fechaNombramientoPrecursor;
-          if (fechaNombramientoPrecursor != undefined && fechaNombramientoPrecursor != null && fechaNombramientoPrecursor != '') {
-            let fechaNombramientoPrecursorF = new Date(fechaNombramientoPrecursor);
-            this.formAgregarHermano.patchValue(
-              {
-                fechaNombramientoPrecursorF: {
-                  date: {
-                    year: fechaNombramientoPrecursorF.getFullYear(),
-                    month: fechaNombramientoPrecursorF.getMonth() + 1,
-                    day: fechaNombramientoPrecursorF.getDate()
-                  }
-                }
-              }
-            );
+        }
+      );
+    }
+    let fechaNombramientoPrecursor = this.hermanoSeleccionado.fechaNombramientoPrecursor;
+    if (fechaNombramientoPrecursor != undefined && fechaNombramientoPrecursor != null && fechaNombramientoPrecursor != '') {
+      let fechaNombramientoPrecursorF = new Date(fechaNombramientoPrecursor);
+      this.formAgregarHermano.patchValue(
+        {
+          fechaNombramientoPrecursorF: {
+            date: {
+              year: fechaNombramientoPrecursorF.getFullYear(),
+              month: fechaNombramientoPrecursorF.getMonth() + 1,
+              day: fechaNombramientoPrecursorF.getDate()
+            }
           }
+        }
+      );
+    }
   }
 
   crearFormAgregarHermano() {
     this.formAgregarHermano = new FormGroup({
+      '_id': new FormControl(''),
       'nombre': new FormControl('', Validators.required),
       'familia': new FormControl('', Validators.required),
       'genero': new FormControl('', Validators.required),
@@ -217,24 +222,33 @@ export class AgregarPublicadorComponent implements OnInit {
   }
 
   agregarHermano() {
-    console.log("add");
-    console.log(this.formAgregarHermano.value);
-    /* this.loading = true;
+    this.loading = true;
     this.hermanoToAdd = this.formAgregarHermano.value;
     this.publicadorService.agregarHermano(this.hermanoToAdd).subscribe(data => {
       this.loading = false;
       this.addHermanoExitoso = true;
       this.mensajeExito = "Se ha agregado al hermano de manera exitosa";
+      this.socket.emit('hermanos-familia',this.hermanoToAdd.familia);
     }, error => {
       this.loading = false;
       this.hayErrorAdd = true;
       this.errorAdd = "Ocurrio un error al agregar al hermano";
       console.log(error);
-    }) */
+    })
   }
 
   editarHermano() {
-    console.log('edit');
-    console.log(this.formAgregarHermano.value);
+    this.loading = true;
+    this.hermanoToAdd = this.formAgregarHermano.value;
+    this.publicadorService.editarHermano(this.hermanoToAdd).subscribe(data => {
+      this.loading = false;
+      this.addHermanoExitoso = true;
+      this.mensajeExito = `Se han actualizado los datos de ${this.formAgregarHermano.value.nombre} de manera exitosa`;
+    }, error => {
+      this.loading = false;
+      this.hayErrorAdd = true;
+      this.errorAdd = "Ocurrio un error al agregar al hermano";
+      console.log(error);
+    })
   }
 }

@@ -14,6 +14,7 @@ import { LoginService } from './services/login.service';
 import { AgregarPublicadorComponent } from './components/publicadores/agregar-publicador/agregar-publicador.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { SocketService } from './services/socket.service';
 
 
 @NgModule({
@@ -33,7 +34,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     MyDatePickerModule,
     TooltipModule.forRoot()
   ],
-  providers: [LoginService,PublicadoresService],
+  providers: [LoginService,PublicadoresService,SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

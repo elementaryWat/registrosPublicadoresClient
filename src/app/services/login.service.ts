@@ -26,7 +26,7 @@ export class LoginService {
 
   login(email:string, password:string){
     let body=JSON.stringify({email,password});
-    let url=GLOBAL.url+"/api/users/login";
+    let url=GLOBAL.url+"/users/login";
     var headers=new Headers({'Content-Type':'application/json'});
     return this.http.post(url,body,{headers}).map(res=>{
       return res.json();

@@ -7,7 +7,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="agregarPublicadorTitle">
             <span *ngIf="familiaSeleccionada && modoComponent=='add'" >Agregar integrante a familia {{familiaSeleccionada.apellido}}</span>
-            <span *ngIf="hermanoSeleccionado && modoComponent=='edit'" >Editar datos</span>
+            <span *ngIf="hermanoSeleccionado && modoComponent=='edit'" >Editar datos de {{hermanoSeleccionado.nombre}}</span>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -115,7 +115,7 @@
             </div>
             <div *ngIf="formAgregarHermano.controls['precReg'].value">
               <div class="form-group">
-                <label for="idPrecursor">ID precursor/a</label>
+                <label for="idPrecursor">ID precursor<span *ngIf="formAgregarHermano.controls['genero'].value=='F'" >a</span></label>
                 <input type="text" [ngClass]="{'is-valid': formAgregarHermano.controls['idPrecursor'].valid && formAgregarHermano.controls['idPrecursor'].touched
                                     , 'is-invalid':formAgregarHermano.controls['idPrecursor'].invalid && formAgregarHermano.controls['idPrecursor'].touched}"
                   class="form-control" formControlName="idPrecursor" id="idPrecursor">

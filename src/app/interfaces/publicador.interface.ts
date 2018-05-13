@@ -3,6 +3,7 @@ import { Familia } from './familia.interface';
 
 
 export interface Publicador{
+    _id?:string,
     nombre:string,
     familia:Familia,
     genero:string,
