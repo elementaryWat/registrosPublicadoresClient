@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { IMyDpOptions } from 'mydatepicker';
 import { PublicadoresService } from '../../../services/publicadores.service';
 import { Familia } from '../../../interfaces/familia.interface';
@@ -52,6 +52,14 @@ export class AgregarPublicadorComponent implements OnInit {
       this.familias = data.familias;
       publicadorService.openDialog.subscribe(opened => {
         if (opened) {
+          this.formAgregarHermano.setControl('datosContacto',new FormArray([
+            new FormGroup({
+              'tipo':new FormControl('fijo'),
+              'telefono':new FormControl('',Validators.required),
+              'conWhatsApp':new FormControl(false),
+              'empresa':new FormControl('C')
+            })
+          ]))
           this.modoComponent = publicadorService.modoDialog;
           if (this.modoComponent == "add") {
             this.familiaSeleccionada = publicadorService.familiaSeleccionada;
@@ -63,6 +71,12 @@ export class AgregarPublicadorComponent implements OnInit {
               grupo: 1,
               telefono: '',
               celular: '',
+              datosContacto:[{
+                tipo:'fijo',
+                telefono:null,
+                empresa:'C',
+                conWhatsApp:false
+              }],
               fechaNacimiento: '',
               bautizado: false,
               fechaBautismo: '',
@@ -145,6 +159,14 @@ export class AgregarPublicadorComponent implements OnInit {
       'grupo': new FormControl('', Validators.required),
       'telefono': new FormControl(''),
       'celular': new FormControl(''),
+      'datosContacto':new FormArray([
+        new FormGroup({
+          'tipo':new FormControl('fijo'),
+          'telefono':new FormControl('',Validators.required),
+          'conWhatsApp':new FormControl(false),
+          'empresa':new FormControl('C')
+        })
+      ]),
       'fechaNacimientoF': new FormControl(null, Validators.required),
       'fechaNacimiento': new FormControl(null, Validators.required),
       'bautizado': new FormControl('', Validators.required),
@@ -221,8 +243,22 @@ export class AgregarPublicadorComponent implements OnInit {
     })
   }
 
+  agregarTelefono(){
+    (<FormArray>this.formAgregarHermano.controls['datosContacto']).push(new FormGroup({
+      'tipo':new FormControl('celular'),
+      'telefono':new FormControl('',Validators.required),
+      'conWhatsApp':new FormControl(false),
+      'empresa':new FormControl('C')
+    }));
+  }
+  eliminarTelefono(idx:number){
+    (<FormArray>this.formAgregarHermano.controls['datosContacto']).removeAt(idx);
+  }
+
   agregarHermano() {
-    this.loading = true;
+    console.log(this.formAgregarHermano);
+    
+    /* this.loading = true;
     this.hermanoToAdd = this.formAgregarHermano.value;
     this.publicadorService.agregarHermano(this.hermanoToAdd).subscribe(data => {
       this.loading = false;
@@ -234,7 +270,7 @@ export class AgregarPublicadorComponent implements OnInit {
       this.hayErrorAdd = true;
       this.errorAdd = "Ocurrio un error al agregar al hermano";
       console.log(error);
-    })
+    }) */
   }
 
   editarHermano() {
@@ -244,6 +280,7 @@ export class AgregarPublicadorComponent implements OnInit {
       this.loading = false;
       this.addHermanoExitoso = true;
       this.mensajeExito = `Se han actualizado los datos de ${this.formAgregarHermano.value.nombre} de manera exitosa`;
+      this.socket.emit('hermanos-familia',this.hermanoToAdd.familia);      
     }, error => {
       this.loading = false;
       this.hayErrorAdd = true;

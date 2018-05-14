@@ -7,14 +7,14 @@
           {{familia.apellido}}
         </button>
         <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
-          <button (click)="abrirDialogoNuevoIntegrante(familia)"
+          <button (click)="abrirDialogoNuevoIntegrante(familia)" title="Agregar integrante a familia {{ familia.apellido}}"
             type="button" class="btn btn-success" data-toggle="modal" data-target="#addandEditPublicadorModal">
             <i class="fas fa-user-plus"></i>
           </button>
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary" title="Editar datos de familia {{ familia.apellido}}">
             <i class="fas fa-edit"></i>
           </button>
-          <button type="button" class="btn btn-danger">
+          <button type="button" class="btn btn-danger" title="Eliminar a familia {{ familia.apellido}}">
             <i class="fas fa-trash"></i>
           </button>
         </div>
@@ -28,13 +28,13 @@
             <i class="fas fa-female" *ngIf="hermano.genero=='F'" ></i> -->
             {{hermano.nombre}}
             <div class="btn-group float-right" role="group" aria-label="Toolbar Publicador">
-              <button type="button" class="btn btn-outline-secondary">
+              <button type="button" class="btn btn-outline-secondary" title="Datos de {{ hermano.nombre}}">
                 <i class="fas fa-id-card"></i>
               </button>
-              <button (click)="abrirDialogoEditarHermano(hermano)" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addandEditPublicadorModal">
+              <button (click)="abrirDialogoEditarHermano(hermano)" title="Editar datos de {{ hermano.nombre}}" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addandEditPublicadorModal">
                 <i class="fas fa-user-edit"></i>
               </button>
-              <button type="button" class="btn btn-outline-danger">
+              <button type="button" class="btn btn-outline-danger" title="Eliminar a {{ hermano.nombre}}">
                 <i class="fas fa-user-minus"></i>
               </button>
             </div>

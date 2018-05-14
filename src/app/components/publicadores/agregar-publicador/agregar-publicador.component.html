@@ -1,13 +1,13 @@
 <!-- Modal -->
-<div *ngIf="familiaSeleccionada || hermanoSeleccionado" class="modal fade" id="addandEditPublicadorModal" tabindex="-1" role="dialog" aria-labelledby="addPublicadorModal"
-  aria-hidden="true">
+<div *ngIf="familiaSeleccionada || hermanoSeleccionado" class="modal fade" id="addandEditPublicadorModal" tabindex="-1" role="dialog"
+  aria-labelledby="addPublicadorModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form [formGroup]="formAgregarHermano" (ngSubmit)="(modoComponent=='add')?agregarHermano():editarHermano()">
         <div class="modal-header">
           <h5 class="modal-title" id="agregarPublicadorTitle">
-            <span *ngIf="familiaSeleccionada && modoComponent=='add'" >Agregar integrante a familia {{familiaSeleccionada.apellido}}</span>
-            <span *ngIf="hermanoSeleccionado && modoComponent=='edit'" >Editar datos de {{hermanoSeleccionado.nombre}}</span>
+            <span *ngIf="familiaSeleccionada && modoComponent=='add'">Agregar integrante a familia {{familiaSeleccionada.apellido}}</span>
+            <span *ngIf="hermanoSeleccionado && modoComponent=='edit'">Editar datos de {{hermanoSeleccionado.nombre}}</span>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -23,7 +23,7 @@
               Debe ingresar el nombre del publicador
             </div>
           </div>
-          <div class="form-group" *ngIf="modoComponent=='edit'" >
+          <div class="form-group" *ngIf="modoComponent=='edit'">
             <label for="celular">Familia</label>
             <select class="custom-select" formControlName="familia">
               <option *ngFor="let familia of familias" [value]="familia._id">{{familia.apellido}}</option>
@@ -62,6 +62,65 @@
               Debe ingresar el telefono
             </div>
           </div>
+          <div class="card form-group">
+            <div class="card-header">
+              Datos de contacto
+              <button type="button" class="btn btn-success btn-sm float-right" (click)="agregarTelefono()">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush" formArrayName="datosContacto">
+                <li class="list-group-item" *ngFor="let contactData of formAgregarHermano.controls['datosContacto'].controls; let i=index"
+                  [formGroupName]="i">
+                  <h6>
+                    Numero {{i+1}}
+                    <button *ngIf="i>0" type="button" class="btn btn-danger btn-sm float-right" title="Eliminar este numero"
+                       (click)="eliminarTelefono(i)">
+                      <i class="fas fa-trash fa-sm"></i>
+                    </button>
+                  </h6>
+                  <div class="form-group">
+                    <label for="telefono">Tipo</label>
+                    <select class="custom-select" formControlName="tipo">
+                      <option value="fijo">Telefono Fijo</option>
+                      <option value="celular">Celular</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="telefono">Numero</label>
+                    <input type="number"  [ngClass]="{'is-valid': formAgregarHermano.controls['datosContacto'].controls[i].controls['telefono'].valid && formAgregarHermano.controls['datosContacto'].controls[i].controls['telefono'].touched
+                    , 'is-invalid':formAgregarHermano.controls['datosContacto'].controls[i].controls['telefono'].invalid && formAgregarHermano.controls['datosContacto'].controls[i].controls['telefono'].touched}"
+                     class="form-control" id="telefono" formControlName="telefono">
+                     <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['datosContacto'].controls[i].controls['telefono'].errors?.required">
+                        Debe ingresar el numero
+                      </div>
+                  </div>
+                  <div *ngIf="formAgregarHermano.controls['datosContacto'].controls[i].controls['tipo'].value=='celular'" >
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="whatsapp{{i}}" formControlName="conWhatsApp">
+                        <label class="custom-control-label" for="whatsapp{{i}}">
+                          Con WhatsApp
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="telefono">Empresa</label>
+                      <select class="custom-select" formControlName="empresa">
+                        <option value="C">Claro</option>
+                        <option value="P">Personal</option>
+                        <option value="M">Movistar</option>
+                        <option value="N">Nextel</option>
+                        <option value="T">Tuenti</option>
+                      </select>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="celular">Celular</label>
             <input type="number" [ngClass]="{'is-valid': formAgregarHermano.controls['celular'].valid && formAgregarHermano.controls['celular'].touched
@@ -81,7 +140,7 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="bautizado" formControlName="bautizado">
               <label class="custom-control-label" for="bautizado">
-                Bautizad<span *ngIf="formAgregarHermano.controls['genero'].value=='M'" >o</span><span *ngIf="formAgregarHermano.controls['genero'].value=='F'" >a</span>
+                Bautizad<span *ngIf="formAgregarHermano.controls['genero'].value=='M'">o</span><span *ngIf="formAgregarHermano.controls['genero'].value=='F'">a</span>
               </label>
             </div>
           </div>
@@ -109,13 +168,14 @@
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="precReg" formControlName="precReg">
                 <label class="custom-control-label" for="precReg">
-                  Precursor<span *ngIf="formAgregarHermano.controls['genero'].value=='F'" >a</span> regular
+                  Precursor<span *ngIf="formAgregarHermano.controls['genero'].value=='F'">a</span> regular
                 </label>
               </div>
             </div>
             <div *ngIf="formAgregarHermano.controls['precReg'].value">
               <div class="form-group">
-                <label for="idPrecursor">ID precursor<span *ngIf="formAgregarHermano.controls['genero'].value=='F'" >a</span></label>
+                <label for="idPrecursor">ID precursor<span *ngIf="formAgregarHermano.controls['genero'].value=='F'">a</span>
+                </label>
                 <input type="text" [ngClass]="{'is-valid': formAgregarHermano.controls['idPrecursor'].valid && formAgregarHermano.controls['idPrecursor'].touched
                                     , 'is-invalid':formAgregarHermano.controls['idPrecursor'].invalid && formAgregarHermano.controls['idPrecursor'].touched}"
                   class="form-control" formControlName="idPrecursor" id="idPrecursor">
@@ -132,7 +192,7 @@
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
           <div class="alert alert-danger" role="alert" *ngIf="hayErrorAdd">
             {{errorAdd}}
           </div>
@@ -142,13 +202,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button *ngIf="modoComponent=='add'"  type="submit" class="btn btn-success">
+          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" [disabled]="formAgregarHermano.invalid">
             <span *ngIf="!loading">
               <i class="fa fa-user-plus"></i> Agregar</span>
             <span *ngIf="loading">
               <i class="fas fa-sync fa-spin"></i> Agregando</span>
           </button>
-          <button *ngIf="modoComponent=='edit'"  type="submit" class="btn btn-primary">
+          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary">
             <span *ngIf="!loading">
               <i class="fa fa-user-edit"></i> Editar</span>
             <span *ngIf="loading">

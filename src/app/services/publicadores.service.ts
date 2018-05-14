@@ -8,6 +8,7 @@ import { Publicador } from '../interfaces/publicador.interface';
 import { Observable } from 'rxjs/Observable';
 
 import * as io from 'socket.io-client';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class PublicadoresService {
@@ -20,6 +21,7 @@ export class PublicadoresService {
   openDialog: BehaviorSubject<boolean>;
   modoDialog: string;
   socket: any;
+  subscriptions:Subscription[]=[];
 
   constructor(private http: Http,
     private userService: LoginService) {
@@ -54,8 +56,15 @@ export class PublicadoresService {
     this.famMap.clear();
     this.obtenerFamilias()
       .subscribe(data => {
+        if(this.subscriptions.length>0){
+          for(let idx in this.subscriptions)
+          {
+            this.subscriptions[idx].unsubscribe();
+          }
+          this.subscriptions=[];
+        }
         for (let familia of data.familias) {
-          this.obtenerHermanosFamilia(familia._id).subscribe(data => {
+          let susc=this.obtenerHermanosFamilia(familia._id).subscribe(data => {
             familia.integrantes = data.hermanos;
             let posF = this.famMap.get(familia._id);
             if (posF == undefined) {
@@ -66,6 +75,7 @@ export class PublicadoresService {
             }
             this.hermanosPorFamiliaS.next(this.hermanosPorFamilia);
           })
+          this.subscriptions.push(susc);
         }
       })
   }
@@ -115,6 +125,13 @@ export class PublicadoresService {
       .map(res => {
         return res.json();
       })
+  }
+  ngOnDestroy(): void {
+    for(let idx in this.subscriptions)
+    {
+      this.subscriptions[idx].unsubscribe();
+    }
+    this.subscriptions=[];
   }
 
 }
