@@ -18,8 +18,10 @@ export class PublicadoresService {
   familiaSeleccionada: Familia;
   hermanoSeleccionado: Publicador;
   famMap: Map<string, number>;
-  openDialog: BehaviorSubject<boolean>;
-  modoDialog: string;
+  openDialogPublicador: BehaviorSubject<boolean>;
+  modoDialogPublicador: string;
+  openDialogFamilia: BehaviorSubject<boolean>;
+  modoDialogFamilia: string;
   socket: any;
   subscriptions:Subscription[]=[];
 
@@ -27,7 +29,8 @@ export class PublicadoresService {
     private userService: LoginService) {
     this.url = GLOBAL.url + "/publicadores";
     this.hermanosPorFamiliaS = new BehaviorSubject([]);
-    this.openDialog = new BehaviorSubject(false);
+    this.openDialogPublicador = new BehaviorSubject(false);
+    this.openDialogFamilia = new BehaviorSubject(false);
     this.famMap = new Map();
   }
   obtenerFamilias() {

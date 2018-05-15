@@ -1,0 +1,51 @@
+<!-- Modal -->
+<div class="modal fade" id="addandEditFamiliaModal" tabindex="-1" role="dialog"
+  aria-labelledby="agregarEditarFamiliaTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="agregarEditarFamiliaTitle">
+            <span *ngIf="modoComponent=='add'">Añadir familia</span>
+            <span *ngIf="modoComponent=='edit'">Editar familia</span>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="formAgregarEditarFamilia" (ngSubmit)="(modoComponent=='add')?agregarFamilia():editarFamilia()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarEditarFamilia.controls['apellido'].valid && formAgregarEditarFamilia.controls['apellido'].touched
+                          , 'is-invalid':formAgregarEditarFamilia.controls['apellido'].invalid && formAgregarEditarFamilia.controls['apellido'].touched}"
+              class="form-control" formControlName="apellido" id="apellido">
+            <div class="invalid-feedback" *ngIf="formAgregarEditarFamilia.controls['apellido'].errors?.required">
+              Debe ingresar el apellido de la familia
+            </div>
+          </div>
+          <div class="alert alert-danger" role="alert" *ngIf="hayErrorAdd">
+            {{errorAdd}}
+          </div>
+          <div class="alert alert-success" role="alert" *ngIf="createUpdateExitoso">
+            {{msgExito}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" >
+            <span *ngIf="!loading">
+              <i class="fa fa-plus"></i> Agregar</span>
+            <span *ngIf="loading">
+              <i class="fas fa-sync fa-spin"></i> Agregando</span>
+          </button>
+          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary">
+            <span *ngIf="!loading">
+              <i class="fas fa-edit"></i> Editar</span>
+            <span *ngIf="loading">
+              <i class="fas fa-sync fa-spin"></i> Editando</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

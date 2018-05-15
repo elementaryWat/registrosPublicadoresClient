@@ -1,11 +1,10 @@
 <!-- Modal -->
 <div *ngIf="familiaSeleccionada || hermanoSeleccionado" class="modal fade" id="addandEditPublicadorModal" tabindex="-1" role="dialog"
-  aria-labelledby="addPublicadorModal" aria-hidden="true">
+  aria-labelledby="agregarEditarPublicadorTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form [formGroup]="formAgregarHermano" (ngSubmit)="(modoComponent=='add')?agregarHermano():editarHermano()">
         <div class="modal-header">
-          <h5 class="modal-title" id="agregarPublicadorTitle">
+          <h5 class="modal-title" id="agregarEditarPublicadorTitle">
             <span *ngIf="familiaSeleccionada && modoComponent=='add'">Agregar integrante a familia {{familiaSeleccionada.apellido}}</span>
             <span *ngIf="hermanoSeleccionado && modoComponent=='edit'">Editar datos de {{hermanoSeleccionado.nombre}}</span>
           </h5>
@@ -13,6 +12,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <form [formGroup]="formAgregarHermano" (ngSubmit)="(modoComponent=='add')?agregarHermano():editarHermano()">
         <div class="modal-body">
           <div class="form-group">
             <label for="nombreP">Nombre</label>

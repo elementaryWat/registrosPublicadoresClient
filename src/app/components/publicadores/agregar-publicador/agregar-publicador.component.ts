@@ -50,7 +50,7 @@ export class AgregarPublicadorComponent implements OnInit {
     }
     publicadorService.obtenerFamilias().subscribe(data => {
       this.familias = data.familias;
-      publicadorService.openDialog.subscribe(opened => {
+      publicadorService.openDialogPublicador.subscribe(opened => {
         if (opened) {
           this.formAgregarHermano.setControl('datosContacto', new FormArray([
             new FormGroup({
@@ -60,7 +60,7 @@ export class AgregarPublicadorComponent implements OnInit {
               'empresa': new FormControl('C')
             })
           ]))
-          this.modoComponent = publicadorService.modoDialog;
+          this.modoComponent = publicadorService.modoDialogPublicador;
           if (this.modoComponent == "add") {
             this.familiaSeleccionada = publicadorService.familiaSeleccionada;
             this.formAgregarHermano.reset({

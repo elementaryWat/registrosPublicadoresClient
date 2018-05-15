@@ -15,9 +15,12 @@ import { PublicadoresService } from '../services/publicadores.service';
 export class PublicadoresComponent implements AfterViewInit {
   familias:Familia[];
   familiaClickeada:string="";
+  loadingHermanos:boolean=false;
   constructor(public publicadoresService:PublicadoresService) { 
     publicadoresService.obtenerFamiliasConHermanos();
+    this.loadingHermanos=true;
     publicadoresService.hermanosPorFamiliaS.subscribe(familias=>{
+      this.loadingHermanos=false;
       this.familias=familias;
     })
   }
@@ -31,14 +34,24 @@ export class PublicadoresComponent implements AfterViewInit {
 
   abrirDialogoNuevoIntegrante(familia:Familia){
     this.publicadoresService.familiaSeleccionada=familia;
-    this.publicadoresService.modoDialog="add";
-    this.publicadoresService.openDialog.next(true);
+    this.publicadoresService.modoDialogPublicador="add";
+    this.publicadoresService.openDialogPublicador.next(true);
   }
 
   abrirDialogoEditarHermano(hermano:Publicador){
     this.publicadoresService.hermanoSeleccionado=hermano;
-    this.publicadoresService.modoDialog="edit";
-    this.publicadoresService.openDialog.next(true);
+    this.publicadoresService.modoDialogPublicador="edit";
+    this.publicadoresService.openDialogPublicador.next(true);
+  }
+
+  abrirDialogoNuevaFamilia(){
+    this.publicadoresService.modoDialogFamilia="add";
+    this.publicadoresService.openDialogFamilia.next(true);
+  }
+  abrirDialogoEditarFamilia(familia:Familia){
+    this.publicadoresService.familiaSeleccionada=familia;
+    this.publicadoresService.modoDialogFamilia="edit";
+    this.publicadoresService.openDialogFamilia.next(true);
   }
 
 }

@@ -5,6 +5,6 @@ import { Publicador } from './publicador.interface';
 export interface Familia{
     _id?:string,
     apellido:string,
-    congregacion:Congregacion,
+    congregacion:Congregacion
     integrantes?:Publicador[];
 }
