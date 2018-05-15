@@ -15,6 +15,8 @@ import { AgregarPublicadorComponent } from './components/publicadores/agregar-pu
 import { MyDatePickerModule } from 'mydatepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { SocketService } from './services/socket.service';
+import {  EliminarPublicadorComponent } from './components/publicadores/eliminar/eliminar.component';
+import { AgregarEditarFamiliaComponent } from './components/publicadores/agregar-editar-familia/agregar-editar-familia.component';
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import { SocketService } from './services/socket.service';
     NavbarComponent,
     LoginComponent,
     AgregarPublicadorComponent,
+    EliminarPublicadorComponent,
+    AgregarEditarFamiliaComponent,
   ],
   imports: [
     BrowserModule,

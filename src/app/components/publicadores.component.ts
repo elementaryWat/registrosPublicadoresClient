@@ -19,8 +19,6 @@ export class PublicadoresComponent implements AfterViewInit {
     publicadoresService.obtenerFamiliasConHermanos();
     publicadoresService.hermanosPorFamiliaS.subscribe(familias=>{
       this.familias=familias;
-      console.log(familias);
-      
     })
   }
 
