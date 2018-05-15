@@ -53,6 +53,15 @@
               Debe ingresar el domicilio
             </div>
           </div>
+          <div class="form-group">
+            <label for="telefono">Telefono</label>
+            <input type="number" [ngClass]="{'is-valid': formAgregarHermano.controls['telefono'].valid && formAgregarHermano.controls['telefono'].touched
+                            , 'is-invalid':formAgregarHermano.controls['telefono'].invalid && formAgregarHermano.controls['telefono'].touched}"
+              class="form-control" formControlName="telefono" id="telefono">
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['telefono'].errors?.required">
+              Debe ingresar el telefono
+            </div>
+          </div>
           <div class="card form-group">
             <div class="card-header">
               Datos de contacto
@@ -63,7 +72,7 @@
             <div class="card-body">
               <ul class="list-group list-group-flush" formArrayName="datosContacto">
                 <li class="list-group-item" *ngFor="let contactData of formAgregarHermano.controls['datosContacto'].controls; let i=index"
-                  [formGroupName]="i" id="phone{{i}}">
+                  [formGroupName]="i">
                   <h6>
                     Numero {{i+1}}
                     <button *ngIf="i>0" type="button" class="btn btn-danger btn-sm float-right" title="Eliminar este numero"
@@ -99,7 +108,6 @@
                     <div class="form-group">
                       <label for="telefono">Empresa</label>
                       <select class="custom-select" formControlName="empresa">
-                        <option value="D">Desconocido</option>
                         <option value="C">Claro</option>
                         <option value="P">Personal</option>
                         <option value="M">Movistar</option>
@@ -110,6 +118,16 @@
                   </div>
                 </li>
               </ul>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="celular">Celular</label>
+            <input type="number" [ngClass]="{'is-valid': formAgregarHermano.controls['celular'].valid && formAgregarHermano.controls['celular'].touched
+                                , 'is-invalid':formAgregarHermano.controls['celular'].invalid && formAgregarHermano.controls['celular'].touched}"
+              class="form-control" formControlName="celular" id="celular">
+            <div class="invalid-feedback" *ngIf="formAgregarHermano.controls['celular'].errors?.required">
+              Debe ingresar el celular
             </div>
           </div>
           <div class="form-group">
@@ -184,7 +202,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" >
+          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" [disabled]="formAgregarHermano.invalid">
             <span *ngIf="!loading">
               <i class="fa fa-user-plus"></i> Agregar</span>
             <span *ngIf="loading">
