@@ -1,4 +1,14 @@
-<div class="accordion" id="accordion">
+<h3>Familias
+  <button title="Agregar nueva familia" type="button" (click)="abrirDialogoNuevaFamilia()"
+   class="btn btn-success float-right" data-toggle="modal" data-target="#addandEditFamiliaModal">
+    <i class="fas fa-plus"></i>
+  </button>
+</h3> 
+<hr>
+<div class="alert alert-primary" role="alert" *ngIf="loadingHermanos" >
+  <i class="fas fa-sync fa-spin"></i> Cargando lista de hermanos
+</div>
+<div class="accordion" id="accordion" *ngIf="!loadingHermanos">
   <div class="card" *ngFor="let familia of familias">
     <div class="card-header publicador-header" id="heading{{familia._id}}">
       <h5 class="mb-0">
@@ -7,11 +17,13 @@
           {{familia.apellido}}
         </button>
         <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
-          <button (click)="abrirDialogoNuevoIntegrante(familia)" title="Agregar integrante a familia {{ familia.apellido}}"
-            type="button" class="btn btn-success" data-toggle="modal" data-target="#addandEditPublicadorModal">
+          <button (click)="abrirDialogoNuevoIntegrante(familia)" title="Agregar integrante a familia {{ familia.apellido}}" type="button"
+            class="btn btn-success" data-toggle="modal" data-target="#addandEditPublicadorModal">
             <i class="fas fa-user-plus"></i>
           </button>
-          <button type="button" class="btn btn-primary" title="Editar datos de familia {{ familia.apellido}}">
+          <button type="button" class="btn btn-primary" (click)="abrirDialogoEditarFamilia()"
+           data-toggle="modal" data-target="#addandEditFamiliaModal"
+           title="Editar apellido de familia {{ familia.apellido}}">
             <i class="fas fa-edit"></i>
           </button>
           <button type="button" class="btn btn-danger" title="Eliminar a familia {{ familia.apellido}}">
@@ -23,7 +35,7 @@
     <div id="collapse{{familia._id}}" class="collapse" [attr.aria-labelledby]="'heading'+ familia._id" data-parent="#accordion">
       <div class="card-body">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item hermano-row" *ngFor="let hermano of familia.integrantes" >
+          <li class="list-group-item hermano-row" *ngFor="let hermano of familia.integrantes">
             <!-- <i class="fas fa-male" *ngIf="hermano.genero=='M'"></i>
             <i class="fas fa-female" *ngIf="hermano.genero=='F'" ></i> -->
             {{hermano.nombre}}
@@ -31,10 +43,11 @@
               <button type="button" class="btn btn-outline-secondary" title="Datos de {{ hermano.nombre}}">
                 <i class="fas fa-id-card"></i>
               </button>
-              <button (click)="abrirDialogoEditarHermano(hermano)" title="Editar datos de {{ hermano.nombre}}" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addandEditPublicadorModal">
+              <button (click)="abrirDialogoEditarHermano(hermano)" title="Editar datos de {{ hermano.nombre}}" type="button" class="btn btn-outline-primary"
+                data-toggle="modal" data-target="#addandEditPublicadorModal">
                 <i class="fas fa-user-edit"></i>
               </button>
-              <button type="button" class="btn btn-outline-danger" title="Eliminar a {{ hermano.nombre}}">
+              <button type="button" class="btn btn-outline-danger" title="Eliminar a {{ hermano.nombre}}" data-toggle="modal" data-target="#eliminarPublicadorModal">
                 <i class="fas fa-user-minus"></i>
               </button>
             </div>
@@ -45,3 +58,5 @@
   </div>
 </div>
 <app-agregaryeditar-publicador></app-agregaryeditar-publicador>
+<app-agregar-editar-familia></app-agregar-editar-familia>
+<app-eliminar-publicador></app-eliminar-publicador>
