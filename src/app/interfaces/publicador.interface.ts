@@ -9,8 +9,12 @@ export interface Publicador{
     genero:string,
     domicilio:string,
     grupo:number,
-    telefono:string,
-    celular:string,
+    datosContacto:[{
+        tipo:string,
+        telefono:string,
+        conWhatsApp:boolean,
+        empresa:string
+    }],
     fechaNacimiento:string,
     bautizado:boolean,
     fechaBautismo?:string,
