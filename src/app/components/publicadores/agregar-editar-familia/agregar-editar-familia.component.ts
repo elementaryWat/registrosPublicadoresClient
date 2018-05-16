@@ -21,7 +21,7 @@ export class AgregarEditarFamiliaComponent implements OnInit {
   msgExito:string;
   loading:boolean;
   congregacionActual:string;
-  initialValue:string;
+  initialValue:Familia;
   cambioForm:boolean;
   socket:any;
 
@@ -30,6 +30,7 @@ export class AgregarEditarFamiliaComponent implements OnInit {
     private socketService: SocketService) { 
     this.socket=socketService.socket;
     this.crearFormAgregarEditarFamilia();
+    this.initialValue=this.formAgregarEditarFamilia.value; 
     this.congregacionActual=this.userService.getUsuarioActual().congregacion._id;
       publicadoresService.openDialogFamilia.subscribe(opened=>{
         if(opened){
@@ -45,7 +46,7 @@ export class AgregarEditarFamiliaComponent implements OnInit {
               apellido:publicadoresService.familiaSeleccionada.apellido,
               congregacion:this.congregacionActual
             })
-            this.initialValue=JSON.stringify(this.formAgregarEditarFamilia.value);  
+            this.initialValue=this.formAgregarEditarFamilia.value;  
             this.cambioForm=false; 
           }
         }
@@ -65,7 +66,7 @@ export class AgregarEditarFamiliaComponent implements OnInit {
     this.formAgregarEditarFamilia.valueChanges.subscribe(currentValue=>{
       this.hayErrorAddUpdate=false;
       this.createUpdateExitoso=false;
-      this.cambioForm=JSON.stringify(currentValue)!=this.initialValue;
+      this.cambioForm=JSON.stringify(currentValue)!=JSON.stringify(this.initialValue);
     })
   }
 
@@ -90,7 +91,7 @@ export class AgregarEditarFamiliaComponent implements OnInit {
       this.createUpdateExitoso=true;
       this.msgExito="Se ha actualizado el apellido de la familia correctamente";
       this.socket.emit('lista-familias-updated');
-      this.initialValue=JSON.stringify(this.formAgregarEditarFamilia.value);  
+      this.initialValue=this.formAgregarEditarFamilia.value;  
       this.cambioForm=false; 
     },error=>{
       this.hayErrorAddUpdate=true;
@@ -101,13 +102,17 @@ export class AgregarEditarFamiliaComponent implements OnInit {
 
   existeFamilia(control:FormControl){
     let promiseFamilia=new Promise((resolve,reject)=>{
-      this.publicadoresService.existeFamilia(control.value).subscribe(data=>{
-        if(data.founded){
-          resolve({existeFamilia:true})
-        }else{
-          resolve(null);
-        }
-      })
+      if(this.initialValue.apellido!=control.value){
+        this.publicadoresService.existeFamilia(control.value).subscribe(data=>{
+          if(data.founded){
+            resolve({existeFamilia:true})
+          }else{
+            resolve(null);
+          }
+        })
+      }else{
+        resolve(null);
+      }
     })
     return promiseFamilia;
   }
