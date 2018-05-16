@@ -178,19 +178,22 @@
           <div class="alert alert-danger" role="alert" *ngIf="hayErrorAdd">
             {{errorAdd}}
           </div>
-          <div class="alert alert-success" role="alert" *ngIf="addHermanoExitoso">
+          <div class="alert alert-success" role="alert" *ngIf="addHermanoExitoso && modoComponent=='add'" >
+            {{mensajeExito}}
+          </div>
+          <div class="alert alert-primary" role="alert" *ngIf="addHermanoExitoso && modoComponent=='edit'">
             {{mensajeExito}}
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" >
+          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" [disabled]="formAgregarHermano.invalid">
             <span *ngIf="!loading">
               <i class="fa fa-user-plus"></i> Agregar</span>
             <span *ngIf="loading">
               <i class="fas fa-sync fa-spin"></i> Agregando</span>
           </button>
-          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary">
+          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary" [disabled]="formAgregarHermano.invalid">
             <span *ngIf="!loading">
               <i class="fa fa-user-edit"></i> Editar</span>
             <span *ngIf="loading">

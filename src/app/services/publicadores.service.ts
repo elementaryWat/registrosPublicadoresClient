@@ -74,7 +74,7 @@ export class PublicadoresService {
               let lengthAF = this.hermanosPorFamilia.push(familia);
               this.famMap.set(familia._id, lengthAF - 1);
             } else {
-              this.hermanosPorFamilia[posF].integrantes = familia.integrantes;
+              this.hermanosPorFamilia[posF] = familia;
             }
             this.hermanosPorFamiliaS.next(this.hermanosPorFamilia);
           })
@@ -104,6 +104,42 @@ export class PublicadoresService {
     })
     return observable;
 
+  }
+
+  existeFamilia(apellido:string) {
+    let body = JSON.stringify({apellido, congregacion:this.userService.getUsuarioActual().congregacion._id});
+    let headers = new Headers({
+      'Authorization': this.userService.getTokenActual(),
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(this.url + "/existeFamilia", body, { headers })
+      .map(res => {
+        return res.json();
+      })
+  }
+
+  agregarFamilia(familia: Familia) {
+    let body = JSON.stringify(familia);
+    let headers = new Headers({
+      'Authorization': this.userService.getTokenActual(),
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(this.url + "/agregarFamilia", body, { headers })
+      .map(res => {
+        return res.json();
+      })
+  }
+
+  editarFamilia(familia: Familia) {
+    let body = JSON.stringify(familia);
+    let headers = new Headers({
+      'Authorization': this.userService.getTokenActual(),
+      'Content-Type': 'application/json'
+    });
+    return this.http.put(this.url + "/editarFamilia/"+familia._id, body, { headers })
+      .map(res => {
+        return res.json();
+      })
   }
 
   agregarHermano(publicador: Publicador) {
