@@ -6,7 +6,7 @@
 </h3> 
 <hr>
 <div class="alert alert-primary" role="alert" *ngIf="loadingHermanos" >
-  <i class="fas fa-sync fa-spin"></i> Cargando lista de hermanos
+  <i class="fas fa-sync fa-spin"></i> Cargando lista de familias
 </div>
 <div class="accordion" id="accordion" *ngIf="!loadingHermanos">
   <div class="card" *ngFor="let familia of familias">
@@ -14,7 +14,7 @@
       <h5 class="mb-0">
         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" aria-expanded="false" [attr.data-target]="'#collapse'+ familia._id"
           [attr.aria-controls]="'collapse'+ familia._id" (click)="onClickFamily(familia._id)">
-          {{familia.apellido}}
+          {{familia.apellido}} <!-- <span class="badge badge-secondary">{{familia.integrantes.length}} integrantes</span> -->
         </button>
         <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
           <button (click)="abrirDialogoNuevoIntegrante(familia)" title="Agregar integrante a familia {{ familia.apellido}}" type="button"

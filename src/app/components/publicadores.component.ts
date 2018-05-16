@@ -20,7 +20,9 @@ export class PublicadoresComponent implements AfterViewInit {
     publicadoresService.obtenerFamiliasConHermanos();
     this.loadingHermanos=true;
     publicadoresService.hermanosPorFamiliaS.subscribe(familias=>{
-      this.loadingHermanos=false;
+      if(!publicadoresService.listaHermanosPorFamiliaInicial){
+        this.loadingHermanos=false;
+      }
       this.familias=familias;
     })
   }

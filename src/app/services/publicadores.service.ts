@@ -15,6 +15,7 @@ export class PublicadoresService {
   url: string;
   hermanosPorFamilia: Familia[];
   hermanosPorFamiliaS: BehaviorSubject<Familia[]>;
+  listaHermanosPorFamiliaInicial:boolean;
   familiaSeleccionada: Familia;
   hermanoSeleccionado: Publicador;
   famMap: Map<string, number>;
@@ -29,6 +30,7 @@ export class PublicadoresService {
     private userService: LoginService) {
     this.url = GLOBAL.url + "/publicadores";
     this.hermanosPorFamiliaS = new BehaviorSubject([]);
+    this.listaHermanosPorFamiliaInicial=true;
     this.openDialogPublicador = new BehaviorSubject(false);
     this.openDialogFamilia = new BehaviorSubject(false);
     this.famMap = new Map();
@@ -81,6 +83,7 @@ export class PublicadoresService {
             familia.integrantes = data.hermanos;
             let posF = this.famMap.get(familia._id);
             this.hermanosPorFamilia[posF] = familia;
+            this.listaHermanosPorFamiliaInicial=false;
             this.hermanosPorFamiliaS.next(this.hermanosPorFamilia);
           })
           this.subscriptions.push(susc);
