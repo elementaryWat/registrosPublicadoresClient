@@ -142,6 +142,18 @@ export class PublicadoresService {
       })
   }
 
+  existeIntegranteFamilia(nombre:string,familiaId:string) {
+    let body = JSON.stringify({nombre:nombre, familia:familiaId});
+    let headers = new Headers({
+      'Authorization': this.userService.getTokenActual(),
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(this.url + "/existeIntegranteFamilia", body, { headers })
+      .map(res => {
+        return res.json();
+      })
+  }
+
   agregarHermano(publicador: Publicador) {
     let body = JSON.stringify(publicador);
     let headers = new Headers({

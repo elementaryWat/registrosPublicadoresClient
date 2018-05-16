@@ -29,7 +29,7 @@ export class AgregarPublicadorComponent implements OnInit {
   grupos: any[] = [];
   modoComponent: string = "add";
   socket: any;
-  initialValue:Publicador;
+  initialValue:any;
   cambioF:boolean;
 
   public myDatePickerOptions: IMyDpOptions = {
@@ -41,7 +41,7 @@ export class AgregarPublicadorComponent implements OnInit {
   public model: any = { date: { year: 2018, month: 10, day: 9 } };
 
 
-  constructor(private publicadorService: PublicadoresService,
+  constructor(private publicadoresService: PublicadoresService,
     private userService: LoginService,
     private socketService: SocketService) {
     this.socket = socketService.socket;
@@ -51,9 +51,9 @@ export class AgregarPublicadorComponent implements OnInit {
     for (let i = 1; i <= this.cantGrupos; i++) {
       this.grupos.push(i);
     }
-    publicadorService.obtenerFamilias().subscribe(data => {
+    publicadoresService.obtenerFamilias().subscribe(data => {
       this.familias = data.familias;
-      publicadorService.openDialogPublicador.subscribe(opened => {
+      publicadoresService.openDialogPublicador.subscribe(opened => {
         if (opened) {
           this.formAgregarHermano.setControl('datosContacto', new FormArray([
             new FormGroup({
@@ -63,9 +63,9 @@ export class AgregarPublicadorComponent implements OnInit {
               'empresa': new FormControl('C')
             })
           ]))
-          this.modoComponent = publicadorService.modoDialogPublicador;
+          this.modoComponent = publicadoresService.modoDialogPublicador;
           if (this.modoComponent == "add") {
-            this.familiaSeleccionada = publicadorService.familiaSeleccionada;
+            this.familiaSeleccionada = publicadoresService.familiaSeleccionada;
             this.formAgregarHermano.reset({
               nombre: '',
               familia: this.familiaSeleccionada._id,
@@ -89,7 +89,7 @@ export class AgregarPublicadorComponent implements OnInit {
               fechaNombramientoPrecursor: ''
             });
           } else if (this.modoComponent == "edit") {
-            this.hermanoSeleccionado = publicadorService.hermanoSeleccionado;
+            this.hermanoSeleccionado = publicadoresService.hermanoSeleccionado;
             this.formAgregarHermano.setControl('datosContacto', new FormArray([
               new FormGroup({
                 'tipo': new FormControl('fijo'),
@@ -197,6 +197,7 @@ export class AgregarPublicadorComponent implements OnInit {
       'fechaNombramientoPrecursorF': new FormControl(''),
       'fechaNombramientoPrecursor': new FormControl('')
     });
+    this.formAgregarHermano.controls['nombre'].setAsyncValidators(this.existeIntegrante.bind(this))
     this.formAgregarHermano.valueChanges.subscribe(currentValue => {
       this.hayErrorAdd = false;
       this.addHermanoExitoso = false;
@@ -278,10 +279,27 @@ export class AgregarPublicadorComponent implements OnInit {
     (<FormArray>this.formAgregarHermano.controls['datosContacto']).removeAt(idx);
   }
 
+  existeIntegrante(control:FormControl){
+    let promiseFamilia=new Promise((resolve,reject)=>{
+      if(this.initialValue.nombre!=control.value){
+        this.publicadoresService.existeIntegranteFamilia(control.value,this.formAgregarHermano.controls['familia'].value).subscribe(data=>{
+          if(data.founded){
+            resolve({existeIntegrante:true})
+          }else{
+            resolve(null);
+          }
+        })
+      }else{
+        resolve(null);
+      }
+    })
+    return promiseFamilia;
+  }
+
   agregarHermano() {
     this.loading = true;
     this.hermanoToAdd = this.formAgregarHermano.value;
-    this.publicadorService.agregarHermano(this.hermanoToAdd).subscribe(data => {
+    this.publicadoresService.agregarHermano(this.hermanoToAdd).subscribe(data => {
       this.loading = false;
       this.addHermanoExitoso = true;
       this.mensajeExito = "Se ha agregado al hermano de manera exitosa";
@@ -297,7 +315,7 @@ export class AgregarPublicadorComponent implements OnInit {
   editarHermano() {
     this.loading = true;
     this.hermanoToAdd = this.formAgregarHermano.value;
-    this.publicadorService.editarHermano(this.hermanoToAdd).subscribe(data => {
+    this.publicadoresService.editarHermano(this.hermanoToAdd).subscribe(data => {
       this.loading = false;
       this.addHermanoExitoso = true;
       this.mensajeExito = `Se han actualizado los datos de ${this.formAgregarHermano.value.nombre} de manera exitosa`;
