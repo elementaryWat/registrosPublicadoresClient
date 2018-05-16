@@ -29,6 +29,8 @@ export class AgregarPublicadorComponent implements OnInit {
   grupos: any[] = [];
   modoComponent: string = "add";
   socket: any;
+  initialValue:Publicador;
+  cambioF:boolean;
 
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
@@ -44,6 +46,7 @@ export class AgregarPublicadorComponent implements OnInit {
     private socketService: SocketService) {
     this.socket = socketService.socket;
     this.crearFormAgregarHermano();
+    this.initialValue=this.formAgregarHermano.value;
     this.cantGrupos = userService.getUsuarioActual().congregacion.cantidadGrupos;
     for (let i = 1; i <= this.cantGrupos; i++) {
       this.grupos.push(i);
@@ -105,6 +108,8 @@ export class AgregarPublicadorComponent implements OnInit {
             }
             this.formAgregarHermano.reset(this.hermanoSeleccionado);
             this.setearFechas();
+            this.initialValue=this.formAgregarHermano.value;
+            this.cambioF=false;
           }
         }
       })
@@ -195,6 +200,7 @@ export class AgregarPublicadorComponent implements OnInit {
     this.formAgregarHermano.valueChanges.subscribe(currentValue => {
       this.hayErrorAdd = false;
       this.addHermanoExitoso = false;
+      this.cambioF=JSON.stringify(this.initialValue)!=JSON.stringify(currentValue);
     })
     this.formAgregarHermano.controls['bautizado'].valueChanges.subscribe(currentValue => {
       if (currentValue) {
@@ -296,6 +302,8 @@ export class AgregarPublicadorComponent implements OnInit {
       this.addHermanoExitoso = true;
       this.mensajeExito = `Se han actualizado los datos de ${this.formAgregarHermano.value.nombre} de manera exitosa`;
       this.socket.emit('hermanos-familia', this.hermanoToAdd.familia);
+      this.initialValue=this.formAgregarHermano.value;
+      this.cambioF=false;
     }, error => {
       this.loading = false;
       this.hayErrorAdd = true;

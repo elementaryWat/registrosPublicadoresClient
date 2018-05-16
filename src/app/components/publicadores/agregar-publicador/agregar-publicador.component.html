@@ -193,7 +193,7 @@
             <span *ngIf="loading">
               <i class="fas fa-sync fa-spin"></i> Agregando</span>
           </button>
-          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary" [disabled]="formAgregarHermano.invalid">
+          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary" [disabled]="formAgregarHermano.invalid || !cambioF">
             <span *ngIf="!loading">
               <i class="fa fa-user-edit"></i> Editar</span>
             <span *ngIf="loading">
