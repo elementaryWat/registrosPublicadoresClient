@@ -23,7 +23,7 @@ export class PublicadoresService {
   openDialogFamilia: BehaviorSubject<boolean>;
   modoDialogFamilia: string;
   socket: any;
-  subscriptions:Subscription[]=[];
+  subscriptions: Subscription[] = [];
 
   constructor(private http: Http,
     private userService: LoginService) {
@@ -59,23 +59,28 @@ export class PublicadoresService {
     this.famMap.clear();
     this.obtenerFamilias()
       .subscribe(data => {
-        if(this.subscriptions.length>0){
-          for(let idx in this.subscriptions)
-          {
+        if (this.subscriptions.length > 0) {
+          for (let idx in this.subscriptions) {
             this.subscriptions[idx].unsubscribe();
           }
-          this.subscriptions=[];
+          this.subscriptions = [];
         }
         for (let familia of data.familias) {
-          let susc=this.obtenerHermanosFamilia(familia._id).subscribe(data => {
+          //Ingresa al arreglo las familias sin integrantes 
+          //para evitar que se desordenen alfabeticamente esperando obtenerlos 
+          let posF = this.famMap.get(familia._id);
+          if (posF == undefined) {
+            let lengthAF = this.hermanosPorFamilia.push(familia);
+            this.famMap.set(familia._id, lengthAF - 1);
+          } else {
+            this.hermanosPorFamilia[posF] = familia;
+          }
+        }
+        for (let familia of data.familias) {
+          let susc = this.obtenerHermanosFamilia(familia._id).subscribe(data => {
             familia.integrantes = data.hermanos;
             let posF = this.famMap.get(familia._id);
-            if (posF == undefined) {
-              let lengthAF = this.hermanosPorFamilia.push(familia);
-              this.famMap.set(familia._id, lengthAF - 1);
-            } else {
-              this.hermanosPorFamilia[posF] = familia;
-            }
+            this.hermanosPorFamilia[posF] = familia;
             this.hermanosPorFamiliaS.next(this.hermanosPorFamilia);
           })
           this.subscriptions.push(susc);
@@ -88,7 +93,7 @@ export class PublicadoresService {
     this.socket.emit('lista-hermanos-familia-inicial', familia);
     let observable = new Observable<any>(observer => {
       this.socket.on('hermanos-familia', (idFamilia) => {
-        if (idFamilia==familia) {
+        if (idFamilia == familia) {
           let headers = new Headers({ 'Authorization': this.userService.getTokenActual() });
           return this.http.get(this.url + "/listaHermanos/" + familia, { headers })
             .map(res => {
@@ -106,8 +111,8 @@ export class PublicadoresService {
 
   }
 
-  existeFamilia(apellido:string) {
-    let body = JSON.stringify({apellido, congregacion:this.userService.getUsuarioActual().congregacion._id});
+  existeFamilia(apellido: string) {
+    let body = JSON.stringify({ apellido, congregacion: this.userService.getUsuarioActual().congregacion._id });
     let headers = new Headers({
       'Authorization': this.userService.getTokenActual(),
       'Content-Type': 'application/json'
@@ -136,14 +141,14 @@ export class PublicadoresService {
       'Authorization': this.userService.getTokenActual(),
       'Content-Type': 'application/json'
     });
-    return this.http.put(this.url + "/editarFamilia/"+familia._id, body, { headers })
+    return this.http.put(this.url + "/editarFamilia/" + familia._id, body, { headers })
       .map(res => {
         return res.json();
       })
   }
 
-  existeIntegranteFamilia(nombre:string,familiaId:string) {
-    let body = JSON.stringify({nombre:nombre, familia:familiaId});
+  existeIntegranteFamilia(nombre: string, familiaId: string) {
+    let body = JSON.stringify({ nombre: nombre, familia: familiaId });
     let headers = new Headers({
       'Authorization': this.userService.getTokenActual(),
       'Content-Type': 'application/json'
@@ -178,11 +183,10 @@ export class PublicadoresService {
       })
   }
   ngOnDestroy(): void {
-    for(let idx in this.subscriptions)
-    {
+    for (let idx in this.subscriptions) {
       this.subscriptions[idx].unsubscribe();
     }
-    this.subscriptions=[];
+    this.subscriptions = [];
   }
 
 }
