@@ -16,14 +16,27 @@ export class PublicadoresComponent implements AfterViewInit {
   familias:Familia[];
   familiaClickeada:string="";
   loadingHermanos:boolean=false;
+  filtroP:any;
   constructor(public publicadoresService:PublicadoresService) { 
     publicadoresService.obtenerFamiliasConHermanos();
-    this.loadingHermanos=true;
+    publicadoresService.filtroPublicadores.subscribe((filtro)=>{
+      this.loadingHermanos=true;
+      this.filtroP=filtro;
+    })
     publicadoresService.hermanosPorFamiliaS.subscribe(familias=>{
       if(!publicadoresService.listaHermanosPorFamiliaInicial){
         this.loadingHermanos=false;
       }
-      this.familias=familias;
+      let familiasTemp=familias;
+      if(this.filtroP && (this.filtroP.tipo!="todos" || this.filtroP.grupo!="todos")){
+        familiasTemp=[];
+        for (let familia of familias){
+          if(familia.integrantes && familia.integrantes.length!=0){
+            familiasTemp.push(familia);
+          }
+        }
+      }
+      this.familias=familiasTemp;
     })
   }
 

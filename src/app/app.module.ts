@@ -17,6 +17,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { SocketService } from './services/socket.service';
 import {  EliminarPublicadorComponent } from './components/publicadores/eliminar/eliminar.component';
 import { AgregarEditarFamiliaComponent } from './components/publicadores/agregar-editar-familia/agregar-editar-familia.component';
+import { FiltropublicadoresComponent } from './components/publicadores/filtropublicadores/filtropublicadores.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { AgregarEditarFamiliaComponent } from './components/publicadores/agregar
     AgregarPublicadorComponent,
     EliminarPublicadorComponent,
     AgregarEditarFamiliaComponent,
+    FiltropublicadoresComponent,
   ],
   imports: [
     BrowserModule,

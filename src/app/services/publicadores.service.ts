@@ -9,6 +9,8 @@ import { Observable } from 'rxjs/Observable';
 
 import * as io from 'socket.io-client';
 import { Subscription } from 'rxjs/Subscription';
+import { SocketService } from './socket.service';
+import { NullAstVisitor } from '@angular/compiler';
 
 @Injectable()
 export class PublicadoresService {
@@ -23,23 +25,37 @@ export class PublicadoresService {
   modoDialogPublicador: string;
   openDialogFamilia: BehaviorSubject<boolean>;
   modoDialogFamilia: string;
-  socket: any;
+  socketFamilias: any;
+  socketShared:any;
   subscriptions: Subscription[] = [];
+  filtroPublicadores:BehaviorSubject<any>;
+  filtroTipoPublicadores:string="todos";
+  filtroGrupoPublicadores:string="todos";
 
   constructor(private http: Http,
-    private userService: LoginService) {
+    private userService: LoginService, 
+    private socketService:SocketService) {
+      this.socketShared=io(GLOBAL.socketUrl);
     this.url = GLOBAL.url + "/publicadores";
     this.hermanosPorFamiliaS = new BehaviorSubject([]);
     this.listaHermanosPorFamiliaInicial=true;
     this.openDialogPublicador = new BehaviorSubject(false);
     this.openDialogFamilia = new BehaviorSubject(false);
+    this.filtroPublicadores = new BehaviorSubject(null);
+    this.filtroPublicadores.subscribe(seleccion=>{
+      if(seleccion){
+        this.filtroGrupoPublicadores=seleccion.grupo;
+        this.filtroTipoPublicadores=seleccion.tipo;
+        this.socketShared.emit('familias');
+      }
+    })
     this.famMap = new Map();
   }
   obtenerFamilias() {
-    this.socket = io(GLOBAL.socketUrl);
-    this.socket.emit('lista-familias-inicial');
+    this.socketFamilias = io(GLOBAL.socketUrl);
+    this.socketFamilias.emit('lista-familias-inicial');
     let observable = new Observable<any>(observer => {
-      this.socket.on('familias', () => {
+      this.socketFamilias.on('familias', () => {
         let headers = new Headers({ 'Authorization': this.userService.getTokenActual() });
         return this.http.get(this.url + "/listaFamilias/" + this.userService.getUsuarioActual().congregacion._id, { headers })
           .map(res => {
@@ -49,7 +65,7 @@ export class PublicadoresService {
           })
       })
       return () => {
-        this.socket.disconnect();
+        this.socketFamilias.disconnect();
       };
     })
     return observable;
@@ -92,13 +108,15 @@ export class PublicadoresService {
   }
 
   obtenerHermanosFamilia(familia: string) {
-    this.socket = io(GLOBAL.socketUrl);
-    this.socket.emit('lista-hermanos-familia-inicial', familia);
+    let socketHermanos = io(GLOBAL.socketUrl);
+    socketHermanos.emit('lista-hermanos-familia-inicial', familia);
     let observable = new Observable<any>(observer => {
-      this.socket.on('hermanos-familia', (idFamilia) => {
+      socketHermanos.on('hermanos-familia', (idFamilia) => {
         if (idFamilia == familia) {
-          let headers = new Headers({ 'Authorization': this.userService.getTokenActual() });
-          return this.http.get(this.url + "/listaHermanos/" + familia, { headers })
+          let body=JSON.stringify({tipo:this.filtroTipoPublicadores, grupo:this.filtroGrupoPublicadores});
+          let headers = new Headers({ 'Authorization': this.userService.getTokenActual()
+                                      , 'Content-Type': 'application/json' });
+          return this.http.post(this.url + "/listaHermanos/" + familia, body , { headers })
             .map(res => {
               return res.json();
             }).subscribe(data => {
@@ -107,7 +125,7 @@ export class PublicadoresService {
         }
       })
       return () => {
-        this.socket.disconnect();
+        socketHermanos.disconnect();
       };
     })
     return observable;
@@ -140,6 +158,8 @@ export class PublicadoresService {
 
   editarFamilia(familia: Familia) {
     let body = JSON.stringify(familia);
+    console.log(body);
+    
     let headers = new Headers({
       'Authorization': this.userService.getTokenActual(),
       'Content-Type': 'application/json'
@@ -190,6 +210,7 @@ export class PublicadoresService {
       this.subscriptions[idx].unsubscribe();
     }
     this.subscriptions = [];
+    this.socketShared.disconnect();
   }
 
 }

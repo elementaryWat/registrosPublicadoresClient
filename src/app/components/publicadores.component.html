@@ -1,62 +1,66 @@
-<h3>Familias
-  <button title="Agregar nueva familia" type="button" (click)="abrirDialogoNuevaFamilia()"
-   class="btn btn-success float-right" data-toggle="modal" data-target="#addandEditFamiliaModal">
-    <i class="fas fa-plus"></i>
-  </button>
-</h3> 
-<hr>
-<div class="alert alert-primary" role="alert" *ngIf="loadingHermanos" >
-  <i class="fas fa-sync fa-spin"></i> Cargando lista de familias
-</div>
-<div class="accordion" id="accordion" *ngIf="!loadingHermanos">
-  <div class="card" *ngFor="let familia of familias">
-    <div class="card-header publicador-header" id="heading{{familia._id}}">
-      <h5 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" aria-expanded="false" [attr.data-target]="'#collapse'+ familia._id"
-          [attr.aria-controls]="'collapse'+ familia._id" (click)="onClickFamily(familia._id)">
-          {{familia.apellido}} <!-- <span class="badge badge-secondary">{{familia.integrantes.length}} integrantes</span> -->
-        </button>
-        <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
-          <button (click)="abrirDialogoNuevoIntegrante(familia)" title="Agregar integrante a familia {{ familia.apellido}}" type="button"
-            class="btn btn-success" data-toggle="modal" data-target="#addandEditPublicadorModal">
-            <i class="fas fa-user-plus"></i>
+<div class="container">
+  <h3>Familias
+    <button title="Filtrar lista de publicadores" type="button" class="btn btn-info float-right"
+      data-toggle="modal" data-target="#filterPublicadoresModal">
+        <i class="fas fa-filter"></i>
+    </button>
+    <button title="Agregar nueva familia" type="button" (click)="abrirDialogoNuevaFamilia()" class="btn btn-success float-right"
+      data-toggle="modal" data-target="#addandEditFamiliaModal">
+      <i class="fas fa-plus"></i>
+    </button>
+  </h3>
+  <hr>
+  <div class="alert alert-primary" role="alert" *ngIf="loadingHermanos">
+    <i class="fas fa-sync fa-spin"></i> Cargando lista de familias
+  </div>
+  <!-- <div class="accordion" id="accordion" *ngIf="!loadingHermanos">
+    <div class="card" *ngFor="let familia of familias">
+      <div class="card-header publicador-header" id="heading{{familia._id}}">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" aria-expanded="false" [attr.data-target]="'#collapse'+ familia._id"
+            [attr.aria-controls]="'collapse'+ familia._id" (click)="onClickFamily(familia._id)">
+            {{familia.apellido}}
           </button>
-          <button type="button" class="btn btn-primary" (click)="abrirDialogoEditarFamilia(familia)"
-           data-toggle="modal" data-target="#addandEditFamiliaModal"
-           title="Editar apellido de familia {{ familia.apellido}}">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button type="button" class="btn btn-danger" title="Eliminar a familia {{ familia.apellido}}">
-            <i class="fas fa-trash"></i>
-          </button>
+          <div class="float-right btn-group toolbar-familia" role="group" aria-label="Toolbar Publicador">
+            <button (click)="abrirDialogoNuevoIntegrante(familia)" title="Agregar integrante a familia {{ familia.apellido}}" type="button"
+              class="btn btn-success" data-toggle="modal" data-target="#addandEditPublicadorModal">
+              <i class="fas fa-user-plus"></i>
+            </button>
+            <button type="button" class="btn btn-primary" (click)="abrirDialogoEditarFamilia(familia)" data-toggle="modal" data-target="#addandEditFamiliaModal"
+              title="Editar apellido de familia {{ familia.apellido}}">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-danger" title="Eliminar a familia {{ familia.apellido}}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </h5>
+      </div>
+      <div id="collapse{{familia._id}}" class="collapse" [attr.aria-labelledby]="'heading'+ familia._id" data-parent="#accordion">
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item hermano-row" *ngFor="let hermano of familia.integrantes">
+              {{hermano.nombre}}
+              <div class="btn-group float-right" role="group" aria-label="Toolbar Publicador">
+                <button type="button" class="btn btn-outline-secondary" title="Datos de {{ hermano.nombre}}">
+                  <i class="fas fa-id-card"></i>
+                </button>
+                <button (click)="abrirDialogoEditarHermano(hermano)" title="Editar datos de {{ hermano.nombre}}" type="button" class="btn btn-outline-primary"
+                  data-toggle="modal" data-target="#addandEditPublicadorModal">
+                  <i class="fas fa-user-edit"></i>
+                </button>
+                <button type="button" class="btn btn-outline-danger" title="Eliminar a {{ hermano.nombre}}" data-toggle="modal" data-target="#eliminarPublicadorModal">
+                  <i class="fas fa-user-minus"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
         </div>
-      </h5>
-    </div>
-    <div id="collapse{{familia._id}}" class="collapse" [attr.aria-labelledby]="'heading'+ familia._id" data-parent="#accordion">
-      <div class="card-body">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item hermano-row" *ngFor="let hermano of familia.integrantes">
-            <!-- <i class="fas fa-male" *ngIf="hermano.genero=='M'"></i>
-            <i class="fas fa-female" *ngIf="hermano.genero=='F'" ></i> -->
-            {{hermano.nombre}}
-            <div class="btn-group float-right" role="group" aria-label="Toolbar Publicador">
-              <button type="button" class="btn btn-outline-secondary" title="Datos de {{ hermano.nombre}}">
-                <i class="fas fa-id-card"></i>
-              </button>
-              <button (click)="abrirDialogoEditarHermano(hermano)" title="Editar datos de {{ hermano.nombre}}" type="button" class="btn btn-outline-primary"
-                data-toggle="modal" data-target="#addandEditPublicadorModal">
-                <i class="fas fa-user-edit"></i>
-              </button>
-              <button type="button" class="btn btn-outline-danger" title="Eliminar a {{ hermano.nombre}}" data-toggle="modal" data-target="#eliminarPublicadorModal">
-                <i class="fas fa-user-minus"></i>
-              </button>
-            </div>
-          </li>
-        </ul>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 <app-agregaryeditar-publicador></app-agregaryeditar-publicador>
 <app-agregar-editar-familia></app-agregar-editar-familia>
 <app-eliminar-publicador></app-eliminar-publicador>
+<app-filtropublicadores></app-filtropublicadores>
