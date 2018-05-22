@@ -46,6 +46,11 @@ export class PublicadoresComponent implements AfterViewInit {
   onClickFamily(familiaId:string){
     this.familiaClickeada=familiaId;
   }
+  abrirDialogoInfoPublicador(hermano:Publicador){
+    this.publicadoresService.hermanoSeleccionado=hermano;
+    this.publicadoresService.openDialogInfo.next(true);
+    
+  }
 
   abrirDialogoNuevoIntegrante(familia:Familia){
     this.publicadoresService.familiaSeleccionada=familia;
