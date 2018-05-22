@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="celular">Grupo</label>
+            <label for="celular">Grupo predicación</label>
             <select class="custom-select" formControlName="grupo">
               <option *ngFor="let grupo of grupos" [value]="grupo">{{grupo}}</option>
             </select>
@@ -135,6 +135,13 @@
               <my-date-picker placeholder="DD/MM/AAAA" name="fechaBautismo" [options]="myDatePickerOptions" formControlName="fechaBautismoF"
                 id="fechaBautismoF"></my-date-picker>
             </div>
+            <div class="form-group">
+                <label for="celular">Grupo</label>
+                <select class="custom-select" formControlName="ungido">
+                  <option value=true>Ungido</option>
+                  <option value=false>Otras ovejas</option>
+                </select>
+              </div>
             <div *ngIf="formAgregarHermano.controls['genero'].value=='M'">
               <div class="form-group">
                 <div class="custom-control custom-checkbox">

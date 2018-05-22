@@ -46,10 +46,21 @@
                     </div>
                   </div>
                 </li>
+                <li class="list-group-item" *ngFor="let contactD of hermanoActual.datosContacto" >
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong *ngIf="contactD.tipo=='fijo'">Teléfono fijo</strong>
+                      <strong *ngIf="contactD.tipo=='celular'">Celular</strong>
+                    </div>
+                    <div class="col-md-9">
+                      {{contactD.telefono}} <i class="fas fa-whatsapp-square" *ngIf="contactD.conWhatsApp" ></i>
+                    </div>
+                  </div>
+                </li>
                 <li class="list-group-item">
                   <div class="row ">
                     <div class="col-md-3">
-                      <strong>Grupo</strong>
+                      <strong>Grupo de predicación</strong>
                     </div>
                     <div class="col-md-9">
                       {{hermanoActual.grupo}}
@@ -59,10 +70,66 @@
                 <li class="list-group-item">
                   <div class="row">
                     <div class="col-md-3">
-                      <strong>Fecha de Nacimiento</strong>
+                      <strong>Edad</strong>
                     </div>
                     <div class="col-md-9">
                       {{hermanoActual.fechaNacimiento |fecha}}
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong>Bautizado</strong>
+                    </div>
+                    <div class="col-md-9">
+                      <span *ngIf="!hermanoActual.bautizado">No</span>
+                      <span *ngIf="hermanoActual.bautizado">hace {{hermanoActual.fechaBautismo |fecha}}</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item" *ngIf="hermanoActual.bautizado">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong>Grupo</strong>
+                    </div>
+                    <div class="col-md-9">
+                      <span *ngIf="!hermanoActual.ungido">Otras ovejas</span>
+                      <span *ngIf="hermanoActual.ungido">Ungido</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item" *ngIf="hermanoActual.bautizado && hermanoActual.genero=='M'">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong>Siervo Ministerial</strong>
+                    </div>
+                    <div class="col-md-9">
+                      <span *ngIf="!hermanoActual.siervoMinisterial">NO</span>
+                      <span *ngIf="hermanoActual.siervoMinisterial">SI</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item" *ngIf="hermanoActual.bautizado && hermanoActual.genero=='M'">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong>Anciano</strong>
+                    </div>
+                    <div class="col-md-9">
+                      <span *ngIf="!hermanoActual.anciano">NO</span>
+                      <span *ngIf="hermanoActual.anciano">SI</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item" *ngIf="hermanoActual.bautizado">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong>Precursor
+                        <span *ngIf="hermanoActual.genero=='F'">a</span> regular</strong>
+                    </div>
+                    <div class="col-md-9">
+                      <span *ngIf="!hermanoActual.precReg">NO</span>
+                      <span *ngIf="hermanoActual.precReg">hace {{hermanoActual.fechaNombramientoPrecursor |fecha}}</span>
                     </div>
                   </div>
                 </li>
