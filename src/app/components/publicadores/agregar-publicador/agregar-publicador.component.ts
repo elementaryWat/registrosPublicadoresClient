@@ -281,7 +281,7 @@ export class AgregarPublicadorComponent implements OnInit {
 
   existeIntegrante(control:FormControl){
     let promiseFamilia=new Promise((resolve,reject)=>{
-      if(this.initialValue.nombre!=control.value){
+      if(this.initialValue.nombre!=control.value && this.formAgregarHermano.controls['familia'].value!=""){
         this.publicadoresService.existeIntegranteFamilia(control.value,this.formAgregarHermano.controls['familia'].value).subscribe(data=>{
           if(data.founded){
             resolve({existeIntegrante:true})
@@ -318,7 +318,7 @@ export class AgregarPublicadorComponent implements OnInit {
     this.publicadoresService.editarHermano(this.hermanoToAdd).subscribe(data => {
       this.loading = false;
       this.addHermanoExitoso = true;
-      this.mensajeExito = `Se han actualizado los datos de ${this.formAgregarHermano.value.nombre} de manera exitosa`;
+      this.mensajeExito = `Se han actualizado los datos de ${ this.formAgregarHermano.value.nombre} de manera exitosa`;
       this.socket.emit('hermanos-familia', this.hermanoToAdd.familia);
       this.initialValue=this.formAgregarHermano.value;
       this.cambioF=false;

@@ -24,6 +24,7 @@ export class PublicadoresService {
   openDialogPublicador: BehaviorSubject<boolean>;
   modoDialogPublicador: string;
   openDialogFamilia: BehaviorSubject<boolean>;
+  openDialogInfo: BehaviorSubject<boolean>;
   modoDialogFamilia: string;
   socketFamilias: any;
   socketShared:any;
@@ -41,6 +42,7 @@ export class PublicadoresService {
     this.listaHermanosPorFamiliaInicial=true;
     this.openDialogPublicador = new BehaviorSubject(false);
     this.openDialogFamilia = new BehaviorSubject(false);
+    this.openDialogInfo = new BehaviorSubject(false);
     this.filtroPublicadores = new BehaviorSubject(null);
     this.filtroPublicadores.subscribe(seleccion=>{
       if(seleccion){
