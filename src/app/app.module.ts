@@ -18,6 +18,8 @@ import { SocketService } from './services/socket.service';
 import {  EliminarPublicadorComponent } from './components/publicadores/eliminar/eliminar.component';
 import { AgregarEditarFamiliaComponent } from './components/publicadores/agregar-editar-familia/agregar-editar-familia.component';
 import { FiltropublicadoresComponent } from './components/publicadores/filtropublicadores/filtropublicadores.component';
+import { DetailComponent } from './components/publicadores/detail/detail.component';
+import { FechaPipe } from './pipes/fecha.pipe';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { FiltropublicadoresComponent } from './components/publicadores/filtropub
     EliminarPublicadorComponent,
     AgregarEditarFamiliaComponent,
     FiltropublicadoresComponent,
+    DetailComponent,
+    FechaPipe,
   ],
   imports: [
     BrowserModule,
