@@ -36,6 +36,9 @@ export class PublicadoresService {
   constructor(private http: Http,
     private userService: LoginService, 
     private socketService:SocketService) {
+      console.log(userService.getUsuarioActual());
+      
+
       this.socketShared=io(GLOBAL.socketUrl);
     this.url = GLOBAL.url + "/publicadores";
     this.hermanosPorFamiliaS = new BehaviorSubject([]);
@@ -52,6 +55,7 @@ export class PublicadoresService {
       }
     })
     this.famMap = new Map();
+    // this.obtenerFamiliasConHermanos();
   }
   obtenerFamilias() {
     this.socketFamilias = io(GLOBAL.socketUrl);
@@ -79,33 +83,39 @@ export class PublicadoresService {
     this.famMap.clear();
     this.obtenerFamilias()
       .subscribe(data => {
-        if (this.subscriptions.length > 0) {
-          for (let idx in this.subscriptions) {
-            this.subscriptions[idx].unsubscribe();
+        if (data.familias.length>0){
+          if (this.subscriptions.length > 0) {
+            for (let idx in this.subscriptions) {
+              this.subscriptions[idx].unsubscribe();
+            }
+            this.subscriptions = [];
           }
-          this.subscriptions = [];
-        }
-        for (let familia of data.familias) {
-          //Ingresa al arreglo las familias sin integrantes 
-          //para evitar que se desordenen alfabeticamente esperando obtenerlos 
-          let posF = this.famMap.get(familia._id);
-          if (posF == undefined) {
-            let lengthAF = this.hermanosPorFamilia.push(familia);
-            this.famMap.set(familia._id, lengthAF - 1);
-          } else {
-            this.hermanosPorFamilia[posF] = familia;
-          }
-        }
-        for (let familia of data.familias) {
-          let susc = this.obtenerHermanosFamilia(familia._id).subscribe(data => {
-            familia.integrantes = data.hermanos;
+          for (let familia of data.familias) {
+            //Ingresa al arreglo las familias sin integrantes 
+            //para evitar que se desordenen alfabeticamente esperando obtenerlos 
             let posF = this.famMap.get(familia._id);
-            this.hermanosPorFamilia[posF] = familia;
-            this.listaHermanosPorFamiliaInicial=false;
-            this.hermanosPorFamiliaS.next(this.hermanosPorFamilia);
-          })
-          this.subscriptions.push(susc);
+            if (posF == undefined) {
+              let lengthAF = this.hermanosPorFamilia.push(familia);
+              this.famMap.set(familia._id, lengthAF - 1);
+            } else {
+              this.hermanosPorFamilia[posF] = familia;
+            }
+          }
+          for (let familia of data.familias) {
+            let susc = this.obtenerHermanosFamilia(familia._id).subscribe(data => {
+              familia.integrantes = data.hermanos;
+              let posF = this.famMap.get(familia._id);
+              this.hermanosPorFamilia[posF] = familia;
+              this.listaHermanosPorFamiliaInicial=false;
+              this.hermanosPorFamiliaS.next(this.hermanosPorFamilia);
+            })
+            this.subscriptions.push(susc);
+          }
+        } else{
+          this.listaHermanosPorFamiliaInicial=false;
+          this.hermanosPorFamiliaS.next([]);
         }
+        
       })
   }
 
