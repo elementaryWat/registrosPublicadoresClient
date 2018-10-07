@@ -20,6 +20,9 @@ import { AgregarEditarFamiliaComponent } from './components/publicadores/agregar
 import { FiltropublicadoresComponent } from './components/publicadores/filtropublicadores/filtropublicadores.component';
 import { DetailComponent } from './components/publicadores/detail/detail.component';
 import { FechaPipe } from './pipes/fecha.pipe';
+import { GeneralComponent } from './components/publicadores/detail/general.component';
+import { InformesComponent } from './components/informes/informes.component';
+import { InformesService } from './services/informes.service';
 
 
 @NgModule({
@@ -34,6 +37,8 @@ import { FechaPipe } from './pipes/fecha.pipe';
     FiltropublicadoresComponent,
     DetailComponent,
     FechaPipe,
+    GeneralComponent,
+    InformesComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +49,7 @@ import { FechaPipe } from './pipes/fecha.pipe';
     MyDatePickerModule,
     TooltipModule.forRoot()
   ],
-  providers: [LoginService,PublicadoresService,SocketService],
+  providers: [LoginService,PublicadoresService,SocketService, InformesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
