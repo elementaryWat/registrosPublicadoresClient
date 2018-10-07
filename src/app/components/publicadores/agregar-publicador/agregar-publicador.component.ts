@@ -299,6 +299,8 @@ export class AgregarPublicadorComponent implements OnInit {
   agregarHermano() {
     this.loading = true;
     this.hermanoToAdd = this.formAgregarHermano.value;
+    console.log(this.hermanoToAdd);
+    
     this.publicadoresService.agregarHermano(this.hermanoToAdd).subscribe(data => {
       this.loading = false;
       this.addHermanoExitoso = true;

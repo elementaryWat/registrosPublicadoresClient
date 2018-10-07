@@ -197,7 +197,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" [disabled]="formAgregarHermano.invalid">
+          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" >
             <span *ngIf="!loading">
               <i class="fa fa-user-plus"></i> Agregar</span>
             <span *ngIf="loading">
