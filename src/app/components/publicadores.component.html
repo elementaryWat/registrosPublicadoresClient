@@ -13,6 +13,9 @@
   <div class="alert alert-primary" role="alert" *ngIf="loadingHermanos">
     <i class="fas fa-sync fa-spin"></i> Cargando lista de familias
   </div>
+  <div class="alert alert-info" role="alert" *ngIf="!loadingHermanos &&familias.length==0">
+      Todavía no hay publicadores
+  </div>
   <div class="accordion" id="accordion" *ngIf="!loadingHermanos">
     <div class="card" *ngFor="let familia of familias">
       <div class="card-header publicador-header" id="heading{{familia._id}}">
