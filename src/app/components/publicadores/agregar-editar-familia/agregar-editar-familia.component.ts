@@ -73,6 +73,8 @@ export class AgregarEditarFamiliaComponent implements OnInit {
   agregarFamilia(){
     this.publicadoresService.agregarFamilia(this.formAgregarEditarFamilia.value).subscribe(data=>{
       this.createUpdateExitoso=true;
+      console.log(data);
+      
       this.msgExito="Se ha agregado la familia correctamente";
       this.formAgregarEditarFamilia.reset({
         apellido:'',
