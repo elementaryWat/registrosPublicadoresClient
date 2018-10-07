@@ -53,7 +53,7 @@
                       <strong *ngIf="contactD.tipo=='celular'">Celular</strong>
                     </div>
                     <div class="col-md-9">
-                      {{contactD.telefono}} <i class="fas fa-whatsapp-square" *ngIf="contactD.conWhatsApp" ></i>
+                      <i title="Numero con WhatsApp" class="fab fa-whatsapp fa-lg" *ngIf="contactD.conWhatsApp" ></i> {{contactD.telefono}}
                     </div>
                   </div>
                 </li>

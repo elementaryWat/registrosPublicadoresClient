@@ -2,6 +2,7 @@ import { PublicadoresService } from './../../../services/publicadores.service';
 import { Component, OnInit } from '@angular/core';
 import { Publicador } from '../../../interfaces/publicador.interface';
 
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
