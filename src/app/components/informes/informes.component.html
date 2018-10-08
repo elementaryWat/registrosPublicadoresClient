@@ -1,3 +1,40 @@
-<p>
-  informes works!
-</p>
+<div class="card mb-2" *ngFor="let familia of hermanosConInformesPorFamilia">
+  <div class="card-body">
+    <h5 class="card-title">{{familia.apellido}}</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-success" [ngClass]="{'list-group-item-danger': !integrante.informe}" *ngFor="let integrante of familia.integrantes">
+        {{integrante.nombre}}
+        <button title="Editar informe" *ngIf="integrante.informe"
+          type="button" class="btn btn-primary float-right">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button title="Agregar informe" *ngIf="!integrante.informe"
+          type="button" class="btn btn-success float-right">
+          <i class="fas fa-plus"></i>
+        </button>
+        <table class="table table-borderless table-sm" *ngIf="integrante.informe">
+            <thead>
+              <tr>
+                <th scope="col">Publicaciones</th>
+                <th scope="col">Videos</th>
+                <th scope="col">Horas</th>
+                <th scope="col">Revisitas</th>
+                <th scope="col">Estudios</th>
+                <th scope="col">Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{integrante.informe.publicaciones}}</td>
+                <td>{{integrante.informe.videos}}</td>
+                <td>{{integrante.informe.horas}}</td>
+                <td>{{integrante.informe.revisitas}}</td>
+                <td>{{integrante.informe.estudios}}</td>
+                <td>{{integrante.informe.notas}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </li>
+    </ul>
+  </div>
+</div>

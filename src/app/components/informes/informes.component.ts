@@ -9,10 +9,13 @@ import { PublicadoresService } from '../../services/publicadores.service';
 })
 export class InformesComponent implements OnInit {
 
+  hermanosConInformesPorFamilia:any[]=[];
+
   constructor(private informesService:InformesService,
       private hermanoService:PublicadoresService) { 
     informesService.obtenerInformePorHermano().subscribe(data=>{
-      console.log(data);
+      this.hermanosConInformesPorFamilia=data;
+      console.log(this.hermanosConInformesPorFamilia);
       
     })
   }
