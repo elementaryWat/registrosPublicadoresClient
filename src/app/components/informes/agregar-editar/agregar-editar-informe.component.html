@@ -1,0 +1,87 @@
+<!-- Modal -->
+<div class="modal fade" id="addandEditInformeModal" tabindex="-1" role="dialog" aria-labelledby="agregarEditarInformeTitle"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agregarEditarInformeTitle">
+          <span *ngIf="modoComponent=='add'">Agregar Informe</span>
+          <span *ngIf="modoComponent=='edit'">Editar Informe</span>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="formAgregarEditarInforme" (ngSubmit)="(modoComponent=='add')?agregarFamilia():editarFamilia()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="publicaciones">Publicaciones</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['publicaciones'].valid && formAgregarEditarInforme.controls['publicaciones'].touched
+                              , 'is-invalid':formAgregarEditarInforme.controls['publicaciones'].invalid && formAgregarEditarInforme.controls['publicaciones'].touched}"
+              class="form-control" formControlName="publicaciones" id="publicaciones">
+            <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['publicaciones'].errors?.min">
+              Debe ingresar un numero positivo
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="videos">Videos</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['videos'].valid && formAgregarEditarInforme.controls['videos'].touched
+                                , 'is-invalid':formAgregarEditarInforme.controls['videos'].invalid && formAgregarEditarInforme.controls['videos'].touched}"
+              class="form-control" formControlName="videos" id="videos">
+            <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['videos'].errors?.min">
+              Debe ingresar un numero positivo
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="horas">Horas</label>
+            <input type="number" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['horas'].valid && formAgregarEditarInforme.controls['horas'].touched
+                          , 'is-invalid':formAgregarEditarInforme.controls['horas'].invalid && formAgregarEditarInforme.controls['horas'].touched}"
+              class="form-control" formControlName="horas" id="horas">
+            <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['horas'].errors?.required">
+              Debe ingresar la cantidad de horas
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="revisitas">Revisitas</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['revisitas'].valid && formAgregarEditarInforme.controls['revisitas'].touched
+                                , 'is-invalid':formAgregarEditarInforme.controls['revisitas'].invalid && formAgregarEditarInforme.controls['revisitas'].touched}"
+              class="form-control" formControlName="revisitas" id="revisitas">
+            <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['revisitas'].errors?.min">
+              Debe ingresar un numero positivo
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="estudios">Estudios Bìblicos</label>
+            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['estudios'].valid && formAgregarEditarInforme.controls['estudios'].touched
+                                , 'is-invalid':formAgregarEditarInforme.controls['estudios'].invalid && formAgregarEditarInforme.controls['estudios'].touched}"
+              class="form-control" formControlName="estudios" id="estudios">
+            <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['estudios'].errors?.min">
+              Debe ingresar un numero positivo
+            </div>
+          </div>
+          <div class="alert alert-danger" role="alert" *ngIf="hayErrorAddUpdate">
+            {{errorAddUpdate}}
+          </div>
+          <div class="alert alert-success" role="alert" *ngIf="createUpdateExitoso && modoComponent=='add'">
+            {{msgExito}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button *ngIf="modoComponent=='add'" type="submit" class="btn btn-success" [disabled]="formAgregarEditarInforme.invalid">
+            <span *ngIf="!loading">
+              <i class="fa fa-plus"></i> Agregar</span>
+            <span *ngIf="loading">
+              <i class="fas fa-sync fa-spin"></i> Agregando</span>
+          </button>
+          <button *ngIf="modoComponent=='edit'" type="submit" class="btn btn-primary" [disabled]="formAgregarEditarInforme.invalid || !cambioForm">
+            <span *ngIf="!loading">
+              <i class="fas fa-edit"></i> Editar</span>
+            <span *ngIf="loading">
+              <i class="fas fa-sync fa-spin"></i> Editando</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

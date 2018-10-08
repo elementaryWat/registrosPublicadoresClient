@@ -4,18 +4,22 @@ import { LoginService } from './login.service';
 import { SocketService } from './socket.service';
 import { GLOBAL } from '../GLOBAL';
 import { PublicadoresService } from './publicadores.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Familia } from '../interfaces/familia.interface';
 
 import { Informe } from '../interfaces/informe.interface';
 
 import * as _ from 'lodash';
+import { Publicador } from '../interfaces/publicador.interface';
 
 @Injectable()
 export class InformesService {
   headersGet:Headers;
   headersPost:Headers;
   url:string;
+  openDialogInforme=new  BehaviorSubject(false);
+  modoDialogInforme:string="add";
+  hermanoSeleccionado:Publicador;
 
   constructor(private http: Http,
     private userService: LoginService, 

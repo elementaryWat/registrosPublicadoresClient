@@ -23,6 +23,7 @@ import { FechaPipe } from './pipes/fecha.pipe';
 import { GeneralComponent } from './components/publicadores/detail/general.component';
 import { InformesComponent } from './components/informes/informes.component';
 import { InformesService } from './services/informes.service';
+import { AgregarEditarInformeComponent } from './components/informes/agregar-editar/agregar-editar.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { InformesService } from './services/informes.service';
     FechaPipe,
     GeneralComponent,
     InformesComponent,
+    AgregarEditarInformeComponent,
   ],
   imports: [
     BrowserModule,
