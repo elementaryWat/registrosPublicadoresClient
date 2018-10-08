@@ -3,6 +3,13 @@ import { Http, Headers } from '@angular/http';
 import { LoginService } from './login.service';
 import { SocketService } from './socket.service';
 import { GLOBAL } from '../GLOBAL';
+import { PublicadoresService } from './publicadores.service';
+import { Observable } from 'rxjs';
+import { Familia } from '../interfaces/familia.interface';
+
+import { Informe } from '../interfaces/informe.interface';
+
+import * as _ from 'lodash';
 
 @Injectable()
 export class InformesService {
@@ -12,6 +19,7 @@ export class InformesService {
 
   constructor(private http: Http,
     private userService: LoginService, 
+    private hermanoService:PublicadoresService,
     private socketService:SocketService) { 
        this.url = GLOBAL.url + "/informes";
 
@@ -27,6 +35,23 @@ export class InformesService {
           .map(res => {
             return res.json();
           });
+  }
+  obtenerInformePorHermano(){
+    return Observable.combineLatest(this.hermanoService.hermanosPorFamiliaS,this.obtenerInformes())
+      .map(data=>{return this.joinHermanosWithInformes(<any>data[0],data[1].informes)} )
+  }
+
+  joinHermanosWithInformes(hermanosPorFamilia:Familia[],informes:Informe[]){
+    /* console.log(hermanosPorFamilia);
+    console.log(informes); */
+    
+    return _.map(hermanosPorFamilia,(hermanosFamilia)=>{
+      let integrantes=_.map(hermanosFamilia.integrantes,(hermano)=>{
+        return _.assign(hermano, {informe:_.find( informes, ['hermano', hermano['_id']] )} );
+      })
+
+      return _.assign(hermanosFamilia,{integrantes})
+    })
   }
 
 }
