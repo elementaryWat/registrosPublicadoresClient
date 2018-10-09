@@ -16,7 +16,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="publicaciones">Publicaciones</label>
-            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['publicaciones'].valid && formAgregarEditarInforme.controls['publicaciones'].touched
+            <input type="number" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['publicaciones'].valid && formAgregarEditarInforme.controls['publicaciones'].touched
                               , 'is-invalid':formAgregarEditarInforme.controls['publicaciones'].invalid && formAgregarEditarInforme.controls['publicaciones'].touched}"
               class="form-control" formControlName="publicaciones" id="publicaciones">
             <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['publicaciones'].errors?.min">
@@ -25,7 +25,7 @@
           </div>
           <div class="form-group">
             <label for="videos">Videos</label>
-            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['videos'].valid && formAgregarEditarInforme.controls['videos'].touched
+            <input type="number" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['videos'].valid && formAgregarEditarInforme.controls['videos'].touched
                                 , 'is-invalid':formAgregarEditarInforme.controls['videos'].invalid && formAgregarEditarInforme.controls['videos'].touched}"
               class="form-control" formControlName="videos" id="videos">
             <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['videos'].errors?.min">
@@ -40,10 +40,13 @@
             <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['horas'].errors?.required">
               Debe ingresar la cantidad de horas
             </div>
+            <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['horas'].errors?.min">
+              Si la cantidad de horas es 0 no es necesario agregar el informe
+            </div>
           </div>
           <div class="form-group">
             <label for="revisitas">Revisitas</label>
-            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['revisitas'].valid && formAgregarEditarInforme.controls['revisitas'].touched
+            <input type="number" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['revisitas'].valid && formAgregarEditarInforme.controls['revisitas'].touched
                                 , 'is-invalid':formAgregarEditarInforme.controls['revisitas'].invalid && formAgregarEditarInforme.controls['revisitas'].touched}"
               class="form-control" formControlName="revisitas" id="revisitas">
             <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['revisitas'].errors?.min">
@@ -52,12 +55,28 @@
           </div>
           <div class="form-group">
             <label for="estudios">Estudios Bìblicos</label>
-            <input type="text" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['estudios'].valid && formAgregarEditarInforme.controls['estudios'].touched
+            <input type="number" [ngClass]="{'is-valid': formAgregarEditarInforme.controls['estudios'].valid && formAgregarEditarInforme.controls['estudios'].touched
                                 , 'is-invalid':formAgregarEditarInforme.controls['estudios'].invalid && formAgregarEditarInforme.controls['estudios'].touched}"
               class="form-control" formControlName="estudios" id="estudios">
             <div class="invalid-feedback" *ngIf="formAgregarEditarInforme.controls['estudios'].errors?.min">
               Debe ingresar un numero positivo
             </div>
+          </div>
+          <div class="col-auto my-1" *ngIf="!formAgregarEditarInforme.controls['precReg'].value">
+            <div class="custom-control custom-checkbox mr-sm-2">
+              <input type="checkbox" class="custom-control-input" formControlName="precAux" id="precAux">
+              <label class="custom-control-label" for="precAux">Tomó el precursorado auxiliar</label>
+            </div>
+          </div>
+          <div class="col-auto my-1" *ngIf="formAgregarEditarInforme.controls['precReg'].value">
+            <div class="custom-control custom-checkbox mr-sm-2">
+              <input type="checkbox" class="custom-control-input" formControlName="precReg" id="precReg">
+              <label class="custom-control-label" for="precReg">Estuvo de precursor<span *ngIf="publicadorSeleccionado.genero=='F'">a</span> regular</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="notas">Notas</label>
+            <textarea class="form-control" formControlName="notas" id="notas" rows="3"></textarea>
           </div>
           <div class="alert alert-danger" role="alert" *ngIf="hayErrorAddUpdate">
             {{errorAddUpdate}}

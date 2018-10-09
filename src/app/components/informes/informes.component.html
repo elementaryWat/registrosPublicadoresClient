@@ -5,11 +5,10 @@
       <li class="list-group-item list-group-item-success" [ngClass]="{'list-group-item-danger': !integrante.informe}" *ngFor="let integrante of familia.integrantes">
         {{integrante.nombre}}
         <button title="Editar informe" *ngIf="integrante.informe"
-          (click)="abrirDialogoAgregarInforme(integrante)"
           type="button" class="btn btn-primary float-right">
           <i class="fas fa-edit"></i>
         </button>
-        <button title="Agregar informe" *ngIf="!integrante.informe"
+        <button title="Agregar informe" *ngIf="!integrante.informe" (click)="abrirDialogoAgregarInforme(integrante)"
           type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addandEditInformeModal">
           <i class="fas fa-plus"></i>
         </button>
