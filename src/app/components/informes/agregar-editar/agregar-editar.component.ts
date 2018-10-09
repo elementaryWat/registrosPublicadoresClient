@@ -48,7 +48,6 @@ export class AgregarEditarInformeComponent implements OnInit {
       'horas':new FormControl('',[Validators.required]),
       'publicaciones':new FormControl('',),
       'videos':new FormControl(''),
-      'horas':new FormControl(''),
       'revisitas':new FormControl(''),
       'estudios':new FormControl(''),
       'precAux':new FormControl(''),
@@ -58,7 +57,14 @@ export class AgregarEditarInformeComponent implements OnInit {
       this.hayErrorAddUpdate=false;
       this.createUpdateExitoso=false;
       this.cambioForm=JSON.stringify(currentValue)!=JSON.stringify(this.initialValue);
-    }
+    })
   }
 
+  agregarInforme(){
+    console.log(this.formAgregarEditarInforme.value);
+  }
+
+  editarInforme(){
+    console.log(this.formAgregarEditarInforme.value);
+  }
 }
