@@ -22,6 +22,7 @@ export class InformesService {
   openDialogInforme=new  BehaviorSubject(false);
   modoDialogInforme:string="add";
   hermanoSeleccionado:Publicador;
+  informeSeleccionado:Informe;
   currentMonth:number=9;
   currentYear:number=2018;
   socketGlobal:any;
@@ -86,6 +87,20 @@ export class InformesService {
     return new Promise((resolve, reject)=>{
       let body = JSON.stringify(Object.assign(informe,{month:this.currentMonth,year:this.currentYear}));
       this.http.post(this.url + "/", body, { headers:this.headersPost })
+        .map(res => {
+          return res.json();
+        }).subscribe(data=>{
+         this.socketGlobal.emit('lista-informes-updated', informe.month, informe.year);
+          resolve(data);
+        },error=>{
+          reject(error);
+        })
+    })
+  }
+  editarInforme(informe: Informe) {
+    return new Promise((resolve, reject)=>{
+      let body = JSON.stringify(Object.assign(informe,{month:this.currentMonth,year:this.currentYear}));
+      this.http.put(`${this.url}/${informe._id}`, body, { headers:this.headersPost })
         .map(res => {
           return res.json();
         }).subscribe(data=>{

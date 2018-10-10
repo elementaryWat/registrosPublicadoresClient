@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { InformesService } from '../../services/informes.service';
 import { PublicadoresService } from '../../services/publicadores.service';
 import { Publicador } from '../../interfaces/publicador.interface';
+import { Informe } from '../../interfaces/informe.interface';
 
 @Component({
   selector: 'app-informes',
@@ -27,6 +28,12 @@ export class InformesComponent implements OnInit {
   abrirDialogoAgregarInforme(hermano:Publicador){
     this.informesService.hermanoSeleccionado=hermano;
     this.informesService.modoDialogInforme="add";
+    this.informesService.openDialogInforme.next(true);
+  }
+  
+  abrirDialogoEditarInforme(informe:Informe){
+    this.informesService.informeSeleccionado=informe;
+    this.informesService.modoDialogInforme="edit";
     this.informesService.openDialogInforme.next(true);
   }
 

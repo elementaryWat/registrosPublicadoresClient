@@ -39,6 +39,10 @@ export class AgregarEditarInformeComponent implements OnInit {
             precReg:this.publicadorSeleccionado.precReg,
             precAux:false
           })
+        }else if(this.modoComponent=='edit'){
+          this.formAgregarEditarInforme.reset(informeService.informeSeleccionado);
+          this.initialValue=this.formAgregarEditarInforme.value;  
+          this.cambioForm=false; 
         }
       }
     })
